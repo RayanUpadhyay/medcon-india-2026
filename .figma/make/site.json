@@ -1,0 +1,15 @@
+{
+  "title": "MEDCON India 2026 — Student-Led Medical Conference",
+  "description": "MEDCON India 2026 is a student-led medical conference in Bangalore featuring hands-on CPR workshops, an expert panel on modern healthcare, and the Best Student Life Saver competition. Free entry for students in Grades 8–12.",
+  "language": "en",
+  "icons": {
+    "icon": "/favicon.svg"
+  },
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": true,
+    "ignoreReducedMotion": false
+  }
+}
