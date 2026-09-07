@@ -1,5 +1,16 @@
 import { gallery, links, sectionLabels } from "@/content/site";
 import { SectionLabel } from "@/components/primitives";
+import reelsData from "@/content/reels.json";
+
+type Reel = {
+  id: string;
+  permalink: string;
+  thumbnail: string;
+  caption: string;
+  timestamp: string;
+};
+
+const reels = reelsData as Reel[];
 
 export default function Gallery() {
   const hasInstagram = Boolean(links.instagramUrl);
@@ -22,7 +33,10 @@ export default function Gallery() {
           )}
         </div>
 
-        {/* Editorial mosaic */}
+        {/* ── Event Day photos ─────────────────────────────────────────── */}
+        <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#3D5260] mb-6">
+          Event Day
+        </p>
         <ul className="grid grid-cols-2 md:grid-cols-3 gap-px bg-line list-none p-0 m-0">
           {gallery.map((g) => {
             const inner = (
@@ -55,6 +69,46 @@ export default function Gallery() {
             );
           })}
         </ul>
+
+        {/* ── From Instagram (reels) ───────────────────────────────────── */}
+        {reels.length > 0 && (
+          <div className="mt-20 md:mt-28">
+            <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#3D5260] mb-6">
+              From Instagram
+            </p>
+            <ul className="grid grid-cols-2 md:grid-cols-4 gap-px bg-line list-none p-0 m-0">
+              {reels.map((reel) => (
+                <li key={reel.id} className="bg-bg overflow-hidden aspect-[9/16]">
+                  <a
+                    href={reel.permalink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative block w-full h-full"
+                  >
+                    <img
+                      src={reel.thumbnail}
+                      alt={reel.caption || "Instagram reel"}
+                      loading="lazy"
+                      decoding="async"
+                      className="gallery-img w-full h-full object-cover bg-panel transition-[transform,opacity] duration-500 group-hover:scale-[1.04]"
+                    />
+                    {/* Play icon overlay — signals "this is a video, leaves the site" */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-0 flex items-center justify-center"
+                    >
+                      <span className="flex items-center justify-center w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm">
+                        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white translate-x-[1px]">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </section>
   );

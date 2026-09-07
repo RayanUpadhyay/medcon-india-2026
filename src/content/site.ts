@@ -117,7 +117,7 @@ export const navLinks: NavLink[] = [
   { label: "Events", id: "events" },
   { label: "Panel", id: "panel" },
   { label: "Sponsors", id: "sponsors" },
-  { label: "Gallery", id: "gallery" },
+  { label: "Media", id: "gallery" },
 ];
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
@@ -321,5 +321,5 @@ export const sectionLabels = {
   events: { index: "03", label: "Programme" },
   panel: { index: "04", label: "Panel" },
   sponsors: { index: "05", label: "Partners & Sponsors" },
-  gallery: { index: "06", label: "Gallery" },
+  gallery: { index: "06", label: "Media" },
 } as const;
