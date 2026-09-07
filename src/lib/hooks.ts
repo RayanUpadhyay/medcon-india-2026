@@ -6,6 +6,46 @@ export function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+export type Theme = "light" | "dark";
+
+const THEME_KEY = "medcon-theme";
+
+/** Reads the theme the pre-paint script in index.html already committed to
+ *  <html>, so React's first render matches the painted DOM (no flash/shift). */
+function readTheme(): Theme {
+  if (typeof document === "undefined") return "dark";
+  return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+}
+
+/**
+ * Light/dark theme state. Dark is the default; the choice is mirrored to
+ * <html data-theme>, `color-scheme`, the theme-color meta, and localStorage so
+ * it survives reloads and is picked up by the pre-paint script next visit.
+ * Mount this once (in Nav) and pass `theme` / `toggle` down.
+ */
+export function useTheme(): { theme: Theme; toggle: () => void } {
+  const [theme, setTheme] = useState<Theme>(readTheme);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute("data-theme", theme);
+    root.style.colorScheme = theme;
+
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", theme === "light" ? "#F4F1EA" : "#0C1018");
+
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      /* storage blocked — in-memory state still drives this session */
+    }
+  }, [theme]);
+
+  const toggle = () => setTheme((t) => (t === "light" ? "dark" : "light"));
+
+  return { theme, toggle };
+}
+
 /** Tracks whether the page has scrolled past `threshold` pixels. */
 export function useScrolled(threshold = 48): boolean {
   const [scrolled, setScrolled] = useState(false);

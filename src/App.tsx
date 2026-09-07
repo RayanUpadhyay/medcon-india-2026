@@ -12,7 +12,7 @@ export default function App() {
   useRevealEnabled();
 
   return (
-    <div id="top" className="bg-[#0C1018] text-[#EDE8DF] min-h-full overflow-x-hidden">
+    <div id="top" className="bg-bg text-fg min-h-full overflow-x-hidden">
       <Nav />
       <main id="main">
         <Hero />

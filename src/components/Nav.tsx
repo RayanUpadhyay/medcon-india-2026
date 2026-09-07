@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import logo from "@/imports/image.png";
 import { links, navLinks } from "@/content/site";
-import { useActiveSection, useScrolled } from "@/lib/hooks";
+import { useActiveSection, useScrolled, useTheme } from "@/lib/hooks";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const SECTION_IDS = navLinks.map((l) => l.id);
 
 export default function Nav() {
   const scrolled = useScrolled(48);
   const active = useActiveSection(SECTION_IDS);
+  const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
@@ -44,7 +46,7 @@ export default function Nav() {
       aria-label="Primary"
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
         scrolled || menuOpen
-          ? "bg-[#0C1018]/95 backdrop-blur-sm border-b border-white/[0.06]"
+          ? "bg-bg/95 backdrop-blur-sm border-b border-line"
           : "bg-transparent border-b border-transparent"
       }`}
     >
@@ -52,10 +54,10 @@ export default function Nav() {
         <a href="#top" className="flex items-center gap-3 flex-shrink-0" aria-label="MEDCON 2026 — home">
           <img src={logo} alt="" className="w-9 h-9 rounded-full object-cover" width={36} height={36} />
           <span className="flex items-baseline gap-2">
-            <span className="font-display text-[20px] font-[700] tracking-[-0.025em] text-[#EDE8DF]">
+            <span className="font-display text-[20px] font-[700] tracking-[-0.025em] text-fg">
               MEDCON
             </span>
-            <span className="font-mono text-[10px] text-[#5A9488] tracking-[0.2em]">2026</span>
+            <span className="font-mono text-[10px] text-sage tracking-[0.2em]">2026</span>
           </span>
         </a>
 
@@ -67,15 +69,20 @@ export default function Nav() {
               href={`#${l.id}`}
               aria-current={active === l.id ? "true" : undefined}
               className={`font-sans text-[12px] tracking-[0.14em] uppercase transition-colors duration-200 ${
-                active === l.id ? "text-[#EDE8DF]" : "text-[#6A7882] hover:text-[#EDE8DF]"
+                active === l.id ? "text-fg" : "text-muted hover:text-fg"
               }`}
             >
               {l.label}
             </a>
           ))}
+          <ThemeToggle
+            theme={theme}
+            onToggle={toggle}
+            className="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-fg transition-colors duration-200"
+          />
           <a
             href={links.register}
-            className="ml-1 lg:ml-2 font-sans text-[12px] tracking-[0.14em] uppercase px-5 py-2.5 border border-[#5A9488] text-[#5A9488] hover:bg-[#5A9488] hover:text-[#0C1018] transition-colors duration-200 font-[600]"
+            className="font-sans text-[12px] tracking-[0.14em] uppercase px-5 py-2.5 border border-sage text-sage hover:bg-sage hover:text-on-accent transition-colors duration-200 font-[600]"
           >
             Register
           </a>
@@ -92,17 +99,17 @@ export default function Nav() {
           onClick={() => setMenuOpen((o) => !o)}
         >
           <span
-            className={`block w-6 h-px bg-[#EDE8DF] transition-transform duration-200 origin-center ${
+            className={`block w-6 h-px bg-fg transition-transform duration-200 origin-center ${
               menuOpen ? "translate-y-[6px] rotate-45" : ""
             }`}
           />
           <span
-            className={`block w-6 h-px bg-[#EDE8DF] transition-opacity duration-200 ${
+            className={`block w-6 h-px bg-fg transition-opacity duration-200 ${
               menuOpen ? "opacity-0" : ""
             }`}
           />
           <span
-            className={`block w-6 h-px bg-[#EDE8DF] transition-transform duration-200 origin-center ${
+            className={`block w-6 h-px bg-fg transition-transform duration-200 origin-center ${
               menuOpen ? "-translate-y-[6px] -rotate-45" : ""
             }`}
           />
@@ -113,8 +120,8 @@ export default function Nav() {
       <div
         id="mobile-menu"
         inert={!menuOpen}
-        className={`md:hidden overflow-hidden transition-all duration-300 bg-[#0F1520] ${
-          menuOpen ? "max-h-[70vh] border-b border-white/[0.05]" : "max-h-0"
+        className={`md:hidden overflow-hidden transition-all duration-300 bg-bg-drawer ${
+          menuOpen ? "max-h-[70vh] border-b border-line" : "max-h-0"
         }`}
       >
         <div className="px-6 py-6 flex flex-col gap-1">
@@ -124,15 +131,21 @@ export default function Nav() {
               href={`#${l.id}`}
               onClick={() => setMenuOpen(false)}
               aria-current={active === l.id ? "true" : undefined}
-              className="font-sans text-[13px] tracking-[0.12em] uppercase text-[#6A7882] hover:text-[#EDE8DF] aria-current:text-[#EDE8DF] py-3 border-b border-white/[0.04] transition-colors"
+              className="font-sans text-[13px] tracking-[0.12em] uppercase text-muted hover:text-fg aria-current:text-fg py-3 border-b border-line transition-colors"
             >
               {l.label}
             </a>
           ))}
+          <ThemeToggle
+            theme={theme}
+            onToggle={toggle}
+            withLabel
+            className="flex items-center justify-between py-3 border-b border-line font-sans text-[13px] tracking-[0.12em] uppercase text-muted hover:text-fg transition-colors"
+          />
           <a
             href={links.register}
             onClick={() => setMenuOpen(false)}
-            className="mt-4 font-sans text-[13px] tracking-[0.12em] uppercase py-3.5 border border-[#5A9488] text-[#5A9488] text-center font-[600]"
+            className="mt-4 font-sans text-[13px] tracking-[0.12em] uppercase py-3.5 border border-sage text-sage text-center font-[600]"
           >
             Register
           </a>

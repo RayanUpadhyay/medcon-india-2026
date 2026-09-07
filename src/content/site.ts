@@ -38,10 +38,6 @@ export const links = {
   /** PLACEHOLDER: host institution website, unverified. */
   hostWebsiteLabel: "tisb.org",
   hostWebsiteUrl: "https://www.tisb.org",
-
-  /** PLACEHOLDER: related YouTube channel, unverified. */
-  youtubeLabel: "YouTube",
-  youtubeUrl: "https://www.youtube.com/@projectsuryanayak355",
 } as const;
 
 /* ── Images ───────────────────────────────────────────────────────────────
@@ -311,6 +307,12 @@ export const footer = {
     { label: "Privacy Policy", href: "#" },
     { label: "Terms", href: "#" },
   ],
+  /** Discreet developer colophon in the footer bottom bar. The address is used
+   *  only as the mailto target and is never rendered as text. */
+  credit: {
+    label: "Site by Rayan Upadhyay",
+    email: "RayanUpadhyay@gmail.com",
+  },
 };
 
 /* ── Section index labels (editorial numbering) ─────────────────────────── */
