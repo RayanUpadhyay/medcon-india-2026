@@ -19,6 +19,10 @@ const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
 const MAX_REELS = 6;
 const OUTPUT_PATH = path.resolve("src/content/reels.json");
 const GRAPH_VERSION = "v24.0";
+// Only pull reels posted for THIS year's event — keeps last year's
+// (2025) reels from showing up alongside 2026 content. Bump this each
+// year, or change to a cutoff date if you want more control.
+const MIN_YEAR = 2026;
 
 if (!IG_USER_ID || !IG_ACCESS_TOKEN) {
   console.error(
@@ -58,9 +62,6 @@ async function fetchMedia() {
 }
 
 function toReel(item) {
-  // Reels are VIDEO media with media_product_type "REELS".
-  // thumbnail_url is the still frame; media_url on a reel is the raw video
-  // file, which we don't need for a link-out tile.
   return {
     id: item.id,
     permalink: item.permalink,
@@ -73,18 +74,20 @@ function toReel(item) {
 async function main() {
   const media = await fetchMedia();
 
-  const reels = media
-    .filter((item) => item.media_product_type === "REELS")
-    .slice(0, MAX_REELS)
-    .map(toReel);
-
-  if (reels.length === 0) {
+  if (media.length === 0) {
     console.warn(
-      "No reels found. Leaving existing src/content/reels.json untouched " +
-        "so the site doesn't lose its last-known-good data.",
+      "Instagram API returned no media at all. Leaving existing " +
+        "src/content/reels.json untouched so the site doesn't lose its " +
+        "last-known-good data.",
     );
     return;
   }
+
+  const reels = media
+    .filter((item) => item.media_product_type === "REELS")
+    .filter((item) => new Date(item.timestamp).getFullYear() >= MIN_YEAR)
+    .slice(0, MAX_REELS)
+    .map(toReel);
 
   await writeFile(OUTPUT_PATH, JSON.stringify(reels, null, 2) + "\n", "utf-8");
   console.log(`Wrote ${reels.length} reel(s) to ${OUTPUT_PATH}`);
