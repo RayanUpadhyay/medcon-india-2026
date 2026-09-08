@@ -18,6 +18,7 @@ const IG_USER_ID = process.env.IG_USER_ID;
 const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
 const MAX_REELS = 6;
 const OUTPUT_PATH = path.resolve("src/content/reels.json");
+const STATS_OUTPUT_PATH = path.resolve("src/content/instagram-stats.json");
 const GRAPH_VERSION = "v24.0";
 // Only pull reels posted for THIS year's event — keeps last year's
 // (2025) reels from showing up alongside 2026 content. Bump this each
@@ -62,6 +63,9 @@ async function fetchMedia() {
 }
 
 function toReel(item) {
+  // Reels are VIDEO media with media_product_type "REELS".
+  // thumbnail_url is the still frame; media_url on a reel is the raw video
+  // file, which we don't need for a link-out tile.
   return {
     id: item.id,
     permalink: item.permalink,
@@ -71,10 +75,44 @@ function toReel(item) {
   };
 }
 
+async function fetchAccountStats() {
+  const fields = "username,followers_count,media_count";
+  const url =
+    `https://graph.instagram.com/${GRAPH_VERSION}/${IG_USER_ID}` +
+    `?fields=${fields}&access_token=${IG_ACCESS_TOKEN}`;
+
+  const res = await fetch(url);
+  const body = await res.json();
+
+  if (!res.ok) {
+    console.error("Instagram API error (account stats):", JSON.stringify(body, null, 2));
+    return null;
+  }
+
+  return {
+    username: body.username,
+    followers: body.followers_count,
+    posts: body.media_count,
+  };
+}
+
 async function main() {
   const media = await fetchMedia();
 
+  const stats = await fetchAccountStats();
+  if (stats) {
+    await writeFile(STATS_OUTPUT_PATH, JSON.stringify(stats, null, 2) + "\n", "utf-8");
+    console.log(`Wrote account stats to ${STATS_OUTPUT_PATH}:`, stats);
+  } else {
+    console.warn(
+      "Couldn't fetch account stats this run — leaving existing " +
+        "src/content/instagram-stats.json untouched.",
+    );
+  }
+
   if (media.length === 0) {
+    // Empty response from the API itself is more likely a transient glitch
+    // than "the account genuinely has zero posts" — don't wipe good data.
     console.warn(
       "Instagram API returned no media at all. Leaving existing " +
         "src/content/reels.json untouched so the site doesn't lose its " +
@@ -89,6 +127,9 @@ async function main() {
     .slice(0, MAX_REELS)
     .map(toReel);
 
+  // Here, an empty result is a deliberate outcome of the year filter (e.g.
+  // no 2026 reels posted yet), so we DO write it — this is what clears out
+  // stale reels from a previous year.
   await writeFile(OUTPUT_PATH, JSON.stringify(reels, null, 2) + "\n", "utf-8");
   console.log(`Wrote ${reels.length} reel(s) to ${OUTPUT_PATH}`);
 }

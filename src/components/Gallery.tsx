@@ -1,6 +1,7 @@
 import { gallery, links, sectionLabels } from "@/content/site";
 import { SectionLabel } from "@/components/primitives";
 import reelsData from "@/content/reels.json";
+import instagramStats from "@/content/instagram-stats.json";
 
 type Reel = {
   id: string;
@@ -11,6 +12,11 @@ type Reel = {
 };
 
 const reels = reelsData as Reel[];
+
+function formatCount(n: number): string {
+  if (n >= 1000) return `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k`;
+  return String(n);
+}
 
 export default function Gallery() {
   const hasInstagram = Boolean(links.instagramUrl);
@@ -25,9 +31,15 @@ export default function Gallery() {
               href={links.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-sans text-[12px] tracking-[0.14em] uppercase text-sage hover:text-sage-bright transition-colors inline-flex items-center gap-2"
+              className="font-sans text-[12px] tracking-[0.14em] uppercase text-sage hover:text-sage-bright transition-colors inline-flex items-center gap-3"
             >
               <span>View all · {links.instagramHandle}</span>
+              {typeof instagramStats.followers === "number" && (
+                <span className="text-[#3D5260] normal-case tracking-normal">
+                  {formatCount(instagramStats.followers)} followers
+                  {typeof instagramStats.posts === "number" && ` · ${instagramStats.posts} posts`}
+                </span>
+              )}
               <span aria-hidden="true">↗</span>
             </a>
           )}
