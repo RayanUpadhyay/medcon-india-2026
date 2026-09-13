@@ -16,6 +16,46 @@
     <meta property="og:locale" content="en_IN" />
     <meta name="twitter:card" content="summary" />
 
+    <!-- Event structured data — helps Google show a rich event result
+         (date, venue, description) in search rather than a plain link.
+         Keep this in sync with src/content/site.ts if the date/venue/entry
+         fee ever change. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "MEDCON India 2026",
+        "description": "India's student-led medical conference — hands-on medical skills workshops, an expert panel on modern healthcare, and the Best Student Life Saver competition.",
+        "startDate": "2026-09-19T07:15:00+05:30",
+        "endDate": "2026-09-19T15:00:00+05:30",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+          "@type": "Place",
+          "name": "The International School Bangalore (TISB)",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "NAFL Valley, Whitefield - Sarjapur Road, Near Dommasandra Circle",
+            "addressLocality": "Bangalore",
+            "postalCode": "562125",
+            "addressRegion": "Karnataka",
+            "addressCountry": "IN"
+          }
+        },
+        "organizer": {
+          "@type": "Organization",
+          "name": "MEDCON India",
+          "url": "https://www.instagram.com/medconindia"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "250",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 

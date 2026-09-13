@@ -288,26 +288,23 @@ export const footer = {
   navHeading: "Navigate",
   contactHeading: "Contact",
   venueHeading: "Venue",
-  /** Venue address, confirmed by MEDCON organizing team (Sept 2026). */
+  /** Venue address — matches the official address published on tisb.org
+   *  (verified Sept 2026). If TISB ever updates their site, re-check there. */
   venue: {
     name: "The International School Bangalore (TISB)",
     lines: [
-      "NAFL Valley Circle,",
-      "Sarjapur - Marathahalli Rd, near Dommasandra,",
-      "Whitefield, Thigala Chowdadenahalli,",
-      "Karnataka 562125",
+      "NAFL Valley,",
+      "Whitefield - Sarjapur Road,",
+      "Near Dommasandra Circle,",
+      "Bangalore - 562125, Karnataka, India",
     ],
   },
   /** Google Maps "no API key" embed — built from the venue address above.
    *  If the venue ever changes, regenerate this by URL-encoding the new
    *  address into https://www.google.com/maps?q=<address>&output=embed */
   venueMapEmbedUrl:
-    "https://www.google.com/maps?q=NAFL+Valley+Circle,+Sarjapur+-+Marathahalli+Rd,+near+Dommasandra,+Whitefield,+Thigala+Chowdadenahalli,+Karnataka+562125&output=embed",
+    "https://www.google.com/maps?q=NAFL+Valley,+Whitefield+-+Sarjapur+Road,+Near+Dommasandra+Circle,+Bangalore+562125,+Karnataka,+India&output=embed",
   copyright: "© 2026 MEDCON India · The International School Bangalore",
-  legalLinks: [
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms", href: "#" },
-  ],
   /** Discreet developer colophon in the footer bottom bar. The address is used
    *  only as the mailto target and is never rendered as text. */
   credit: {

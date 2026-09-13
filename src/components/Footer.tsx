@@ -143,15 +143,6 @@ export default function Footer() {
         <div className="pt-8 border-t border-line flex flex-wrap items-center justify-between gap-4">
           <p className="font-mono text-[10px] text-faint-4 tracking-[0.1em]">{footer.copyright}</p>
           <div className="flex flex-wrap items-center gap-6">
-            {footer.legalLinks.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                className="font-mono text-[10px] text-faint-4 hover:text-faint tracking-[0.1em] transition-colors"
-              >
-                {l.label}
-              </a>
-            ))}
             <a
               href={`mailto:${footer.credit.email}`}
               className="font-mono text-[10px] text-faint-4 hover:text-faint tracking-[0.1em] transition-colors"
