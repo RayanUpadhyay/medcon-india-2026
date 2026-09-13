@@ -5,6 +5,8 @@ import Events from "@/components/Events";
 import Panel from "@/components/Panel";
 import Sponsors from "@/components/Sponsors";
 import Gallery from "@/components/Gallery";
+import Contact from "@/components/Contact";
+import Venue from "@/components/Venue";
 import Footer from "@/components/Footer";
 import { useRevealEnabled } from "@/lib/hooks";
 
@@ -21,6 +23,8 @@ export default function App() {
         <Panel />
         <Sponsors />
         <Gallery />
+        <Contact />
+        <Venue />
       </main>
       <Footer />
     </div>

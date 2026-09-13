@@ -21,7 +21,7 @@ export default function Sponsors() {
               >
                 {p.name}
               </h3>
-              <p className="font-sans text-[13px] text-faint">{p.note}</p>
+              {p.note && <p className="font-sans text-[13px] text-faint">{p.note}</p>}
             </Reveal>
           ))}
         </ul>

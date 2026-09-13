@@ -45,7 +45,9 @@ export default function Panel() {
                   {p.name}
                 </h3>
                 <p className="font-sans text-[13px] text-periwinkle mb-1">{p.role}</p>
-                <p className="font-sans text-[12px] text-faint">{p.institution}</p>
+                {p.institution && (
+                  <p className="font-sans text-[12px] text-faint">{p.institution}</p>
+                )}
               </div>
             </Reveal>
           ))}

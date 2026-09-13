@@ -11,7 +11,7 @@
 // IG_ACCESS_TOKEN come from GitHub Actions secrets — never commit real
 // values for these into the repo.
 
-import { writeFile } from "node:fs/promises";
+import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 
 const IG_USER_ID = process.env.IG_USER_ID;
@@ -19,6 +19,8 @@ const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
 const MAX_REELS = 6;
 const OUTPUT_PATH = path.resolve("src/content/reels.json");
 const STATS_OUTPUT_PATH = path.resolve("src/content/instagram-stats.json");
+const THUMB_DIR = path.resolve("public/media/reels");
+const THUMB_URL_PREFIX = "/media/reels";
 const GRAPH_VERSION = "v24.0";
 // Only pull reels posted for THIS year's event — keeps last year's
 // (2025) reels from showing up alongside 2026 content. Bump this each
@@ -75,6 +77,33 @@ function toReel(item) {
   };
 }
 
+/**
+ * Instagram's thumbnail_url is a SIGNED URL that expires (often within a day
+ * or two) — it is NOT a stable link. Hotlinking it directly caused reel
+ * thumbnails to silently break shortly after each sync, leaving broken-image
+ * gaps on the live site. Instead, download each thumbnail once per run and
+ * serve it ourselves from /public, exactly like the other real event photos.
+ */
+async function downloadThumbnail(reel) {
+  if (!reel.thumbnail) return reel;
+
+  try {
+    const res = await fetch(reel.thumbnail);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const buffer = Buffer.from(await res.arrayBuffer());
+
+    await mkdir(THUMB_DIR, { recursive: true });
+    const filename = `${reel.id}.jpg`;
+    await writeFile(path.join(THUMB_DIR, filename), buffer);
+
+    return { ...reel, thumbnail: `${THUMB_URL_PREFIX}/${filename}` };
+  } catch (err) {
+    console.warn(`Couldn't download thumbnail for reel ${reel.id}, skipping it:`, err.message);
+    return null; // drop reels whose thumbnail we couldn't fetch, rather than
+    // ship a broken/expiring image link to the site
+  }
+}
+
 async function fetchAccountStats() {
   const fields = "username,followers_count,media_count";
   const url =
@@ -127,11 +156,19 @@ async function main() {
     .slice(0, MAX_REELS)
     .map(toReel);
 
+  const reelsWithLocalThumbnails = (await Promise.all(reels.map(downloadThumbnail))).filter(
+    Boolean,
+  );
+
   // Here, an empty result is a deliberate outcome of the year filter (e.g.
   // no 2026 reels posted yet), so we DO write it — this is what clears out
   // stale reels from a previous year.
-  await writeFile(OUTPUT_PATH, JSON.stringify(reels, null, 2) + "\n", "utf-8");
-  console.log(`Wrote ${reels.length} reel(s) to ${OUTPUT_PATH}`);
+  await writeFile(
+    OUTPUT_PATH,
+    JSON.stringify(reelsWithLocalThumbnails, null, 2) + "\n",
+    "utf-8",
+  );
+  console.log(`Wrote ${reelsWithLocalThumbnails.length} reel(s) to ${OUTPUT_PATH}`);
 }
 
 main().catch((err) => {

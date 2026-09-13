@@ -33,7 +33,7 @@ export default function Gallery() {
               rel="noopener noreferrer"
               className="font-sans text-[12px] tracking-[0.14em] uppercase text-sage hover:text-sage-bright transition-colors inline-flex items-center gap-3"
             >
-              <span>View all · {links.instagramHandle}</span>
+              <span>See more @medconindia</span>
               {typeof instagramStats.followers === "number" && (
                 <span className="text-[#3D5260] normal-case tracking-normal">
                   {formatCount(instagramStats.followers)} followers
@@ -47,7 +47,7 @@ export default function Gallery() {
 
         {/* ── Event Day photos ─────────────────────────────────────────── */}
         <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#3D5260] mb-6">
-          Event Day
+          Event Day — 2025
         </p>
         <ul className="grid grid-cols-2 md:grid-cols-3 gap-px bg-line list-none p-0 m-0">
           {gallery.map((g) => {

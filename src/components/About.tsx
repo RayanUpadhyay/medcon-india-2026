@@ -1,5 +1,4 @@
 import { about, images, sectionLabels } from "@/content/site";
-import { ACCENT_HEX } from "@/lib/accents";
 import { Reveal, SectionLabel } from "@/components/primitives";
 
 export default function About() {
@@ -30,33 +29,6 @@ export default function About() {
               </p>
             ))}
 
-            {/* Stats */}
-            <div className="mt-16 pt-12 border-t border-line grid grid-cols-2 gap-8">
-              {about.stats.map((s) => (
-                <div key={s.value}>
-                  <div
-                    className="font-display font-[700] leading-none mb-3"
-                    style={{ fontSize: "clamp(48px, 7vw, 88px)", color: ACCENT_HEX[s.accent] }}
-                  >
-                    {s.value}
-                  </div>
-                  <p className="font-sans text-[13px] text-faint leading-[1.6]">{s.caption}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Affiliation */}
-            <div className="mt-12 flex items-start gap-4 p-6 border border-line">
-              <span className="w-px self-stretch bg-sage flex-shrink-0" aria-hidden="true" />
-              <div>
-                <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-sage mb-2">
-                  {about.affiliationLabel}
-                </p>
-                <p className="font-sans text-[14px] text-muted-bright leading-[1.7]">
-                  {about.affiliationValue}
-                </p>
-              </div>
-            </div>
           </Reveal>
 
           {/* Image */}

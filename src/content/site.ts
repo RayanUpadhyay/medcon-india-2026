@@ -51,8 +51,8 @@ export const images = {
     alt: "", // decorative background wash
   },
   about: {
-    src: "https://images.unsplash.com/photo-1758691463203-cce9d415b2b5?w=900&h=1100&fit=crop&auto=format&q=80",
-    alt: "Medical professionals collaborating in a clinical setting",
+    src: "/media/about/cpr-workshop-presentation.jpg",
+    alt: "Students presenting a CPR and cardiac arrest workshop from the TISB stage",
   },
   eventWorkshop: {
     src: "/media/events/workshop-lobby.jpg",
@@ -118,6 +118,8 @@ export const navLinks: NavLink[] = [
   { label: "Panel", id: "panel" },
   { label: "Sponsors", id: "sponsors" },
   { label: "Media", id: "gallery" },
+  { label: "Contact", id: "contact" },
+  { label: "Venue", id: "venue" },
 ];
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
@@ -131,7 +133,7 @@ export const hero = {
   headlineTail: "CON",
   subtitle:
     "Science, healthcare, and entrepreneurship — converging at the frontier of what medicine can become.",
-  ctaPrimary: "Register Free",
+  ctaPrimary: "Register Now",
   ctaSecondary: "View Programme",
 
   /** PLACEHOLDER: event logistics, all unverified. */
@@ -140,7 +142,7 @@ export const hero = {
     { label: "Time", value: "7:15 AM — 3:00 PM" },
     { label: "Venue", value: "TISB, Bangalore" },
     { label: "Eligibility", value: "Grades 8 – 12" },
-    { label: "Entry", value: "Free" },
+    { label: "Entry", value: "₹250" },
   ] as { label: string; value: string }[],
 
   /** PLACEHOLDER: certifications / partnerships, all unverified. */
@@ -160,15 +162,6 @@ export const about = {
     "MedCon is India's first student-led medical conference, happening on Saturday, September 19th, 2026. The conference covers a range of important topics in medicine through workshops, debates, and panel discussions. This year's theme of \"Beyond The White Coat\" focuses on the many disciplines and perspectives that shape healthcare, going beyond traditional medicine.",
     "The student competition helps test all you've learnt throughout the day, involving participants presenting unique solutions to important medicinal problems. The prizes include internships and shadowing opportunities alongside the professionals speaking at the conference. Make sure you register soon to secure your spot — we hope to see you there!",
   ],
-  /** PLACEHOLDER: statistics, unverified. */
-  stats: [
-    { value: "98%", caption: "of Indians remain untrained in basic life-saving CPR", accent: "sage" as const },
-    { value: "#1", caption: "student-led medical conference in India", accent: "cream" as const },
-  ],
-  /** PLACEHOLDER: affiliations, unverified. */
-  affiliationLabel: "Affiliated With",
-  affiliationValue:
-    "Karnataka Government Health Department · Project Suryanayak · Manipal Hospitals",
   missionLabel: "Mission",
   missionQuote:
     "To train, inspire, and equip the next generation of India's medical leaders.",
@@ -193,8 +186,8 @@ export const events: ProgrammeEvent[] = [
   {
     num: "01",
     category: "Hands-On Training",
-    title: "CPR Workshops",
-    body: "Receive personalized CPR instruction leading to State Certification from the Government of Karnataka. This is real skill acquisition — not theory.",
+    title: "Medical Skills Workshop",
+    body: "Receive personalized CPR and medical skills instruction leading to State Certification from the Government of Karnataka. This is real skill acquisition — not theory.",
     tag: "Govt. of Karnataka Certified",
     accent: "sage",
     image: images.eventWorkshop,
@@ -211,8 +204,10 @@ export const events: ProgrammeEvent[] = [
   {
     num: "03",
     category: "Best Student Life Saver",
-    title: "Competition",
-    body: "A high-stakes event where knowledge, composure, and quick thinking are tested under pressure. The top performer earns the Best Student Life Saver 2026 award.",
+    title: "Student Competition",
+    /** PLACEHOLDER: description pending from the R&C team — replace with
+     *  their copy once available. */
+    body: "Details of this year's Student Competition are being finalized by the Research & Competitions team — check back soon, or see the Panel section for confirmed speakers in the meantime.",
     tag: "Open to Grades 8 – 12",
     accent: "sage",
     image: images.eventCompetition,
@@ -234,35 +229,31 @@ export type Panelist = {
   institution: string;
 };
 
-/* PLACEHOLDER: none of these speakers are confirmed. The disclaimer shown
- * under the panel grid depends on this staying illustrative. */
+/* Confirmed MEDCON 2026 panelists (added Sept 2026). More speakers may be
+ * announced closer to the event — update this list and the disclaimer below
+ * as further names are confirmed. */
 export const panel = {
   titleLead: "The Modern",
   titleTail: "Health Paradox",
   intro:
     "A curated panel of medical professionals, researchers, and entrepreneurs examining the contradictions that define healthcare today — where access, technology, equity, and innovation collide and converge.",
   disclaimer:
-    "* Panelists shown for illustration. Official speaker announcements will be released closer to the event.",
+    "* Additional panelists to be announced closer to the event.",
   panelists: [
     {
-      name: "Dr. Ananya Krishnamurthy",
-      role: "Cardiologist & Researcher",
-      institution: "St. John's Medical College, Bangalore",
+      name: "Ms. Shilpi Saraswat",
+      role: "Psychologist",
+      institution: "",
     },
     {
-      name: "Dr. Rahul Mehta",
-      role: "Healthcare Policy Specialist",
-      institution: "AIIMS, New Delhi",
+      name: "Dr. Anirudh Jagannatha",
+      role: "Neurosurgeon",
+      institution: "",
     },
     {
-      name: "Ms. Priya Nair",
-      role: "MedTech Entrepreneur",
-      institution: "Founder, HealthBridge India",
-    },
-    {
-      name: "Dr. Suresh Varma",
-      role: "Emergency Medicine Specialist",
-      institution: "Manipal Hospitals, Bangalore",
+      name: "Mr. Amol Kulkarni",
+      role: "Biomedical Researcher",
+      institution: "",
     },
   ] as Panelist[],
 };
@@ -277,6 +268,7 @@ export type Partner = {
 /* PLACEHOLDER: no sponsor or partner listed here is confirmed. */
 export const partners: Partner[] = [
   { tier: "Title Sponsor", name: "Manipal Hospitals", note: "India's premier hospital network" },
+  { tier: "Sponsor", name: "Medvital Venture", note: "" },
   { tier: "Government Affiliate", name: "Karnataka Health Dept.", note: "State Certification Authority" },
   { tier: "Programme Partner", name: "Project Suryanayak", note: "CPR Awareness Initiative" },
   { tier: "Host Institution", name: "TISB", note: "The International School Bangalore" },
@@ -331,4 +323,6 @@ export const sectionLabels = {
   panel: { index: "04", label: "Panel" },
   sponsors: { index: "05", label: "Partners & Sponsors" },
   gallery: { index: "06", label: "Media" },
+  contact: { index: "07", label: "Contact" },
+  venue: { index: "08", label: "Venue" },
 } as const;
