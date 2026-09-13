@@ -9,8 +9,8 @@ export default function Contact() {
           <SectionLabel index={sectionLabels.contact.index} label={sectionLabels.contact.label} />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-line">
-          <Reveal className="bg-bg p-10 md:p-14">
+        <div className="flex flex-wrap gap-3">
+          <Reveal className="bg-bg border border-line p-10 md:p-14 flex-1 min-w-[260px]">
             <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-sage mb-5">
               Email
             </p>
@@ -29,7 +29,7 @@ export default function Contact() {
           </Reveal>
 
           {links.instagramUrl && (
-            <Reveal delay={70} className="bg-bg p-10 md:p-14">
+            <Reveal delay={70} className="bg-bg border border-line p-10 md:p-14 flex-1 min-w-[260px]">
               <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-sage mb-5">
                 Instagram
               </p>

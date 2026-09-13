@@ -17,7 +17,7 @@ export default function Events() {
         </div>
 
         {/* Cards */}
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-px bg-line list-none p-0 m-0">
+        <ul className="flex flex-wrap gap-3 list-none p-0 m-0">
           {events.map((ev, i) => {
             const accent = ACCENT_HEX[ev.accent];
             return (
@@ -25,7 +25,7 @@ export default function Events() {
                 as="li"
                 key={ev.num}
                 delay={i * 90}
-                className="bg-bg-alt flex flex-col group"
+                className="bg-bg-alt border border-line flex flex-col group flex-1 min-w-[280px]"
               >
                 <div className="relative overflow-hidden bg-panel">
                   <img
@@ -84,9 +84,9 @@ export default function Events() {
         </ul>
 
         {/* Details strip */}
-        <dl className="mt-px grid grid-cols-2 md:grid-cols-4 gap-px bg-line m-0">
+        <dl className="mt-6 flex flex-wrap gap-3 m-0">
           {eventDetails.map((d) => (
-            <div key={d.label} className="bg-bg-alt px-6 py-5">
+            <div key={d.label} className="bg-bg-alt border border-line px-6 py-5 flex-1 min-w-[160px]">
               <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-faint mb-2">
                 {d.label}
               </dt>

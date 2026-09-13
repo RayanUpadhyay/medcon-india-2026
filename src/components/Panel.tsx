@@ -26,13 +26,13 @@ export default function Panel() {
         </div>
 
         {/* Panelists */}
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line list-none p-0 m-0">
+        <ul className="flex flex-wrap gap-3 list-none p-0 m-0">
           {panel.panelists.map((p, i) => (
             <Reveal
               as="li"
               key={p.name}
               delay={i * 70}
-              className="bg-bg p-8 flex flex-col gap-4 hover:bg-surface transition-colors duration-200"
+              className="bg-bg border border-line p-8 flex flex-col gap-4 hover:bg-surface transition-colors duration-200 flex-1 min-w-[220px]"
             >
               <span
                 aria-hidden="true"
