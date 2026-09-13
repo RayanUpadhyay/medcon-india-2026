@@ -1,4 +1,5 @@
 import logo from "@/imports/image.png";
+import tisbLogo from "@/imports/tisb-logo.png";
 import { footer, links, navLinks } from "@/content/site";
 
 export default function Footer() {
@@ -27,6 +28,29 @@ export default function Footer() {
             <p className="font-sans text-[14px] text-faint leading-[1.75] max-w-[280px] mb-6">
               {footer.blurb}
             </p>
+            {/* Host institution mark — TISB, given prominence here since this
+                is their event. */}
+            <a
+              href={links.hostWebsiteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Hosted by The International School Bangalore (TISB) — visit tisb.org"
+              className="flex items-center gap-3 mb-6"
+            >
+              <img
+                src={tisbLogo}
+                alt=""
+                aria-hidden="true"
+                width={44}
+                height={44}
+                className="w-11 h-11 object-contain"
+              />
+              <span className="font-mono text-[11px] tracking-[0.15em] uppercase text-faint">
+                Hosted by
+                <br />
+                The International School Bangalore
+              </span>
+            </a>
             {links.instagramUrl && (
               <a
                 href={links.instagramUrl}

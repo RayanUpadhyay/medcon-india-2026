@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import logo from "@/imports/image.png";
+import tisbLogo from "@/imports/tisb-logo.png";
 import { links, navLinks } from "@/content/site";
 import { useActiveSection, useScrolled, useTheme } from "@/lib/hooks";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -51,15 +52,33 @@ export default function Nav() {
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-[68px] flex items-center justify-between">
-        <a href="#top" className="flex items-center gap-3 flex-shrink-0" aria-label="MEDCON 2026 — home">
-          <img src={logo} alt="" className="w-9 h-9 rounded-full object-cover" width={36} height={36} />
-          <span className="flex items-baseline gap-2">
-            <span className="font-display text-[20px] font-[700] tracking-[-0.025em] text-fg">
-              MEDCON
+        <div className="flex items-center flex-shrink-0">
+          <a href="#top" className="flex items-center gap-3" aria-label="MEDCON 2026 — home">
+            <img src={logo} alt="" className="w-9 h-9 rounded-full object-cover" width={36} height={36} />
+            <span className="flex items-baseline gap-2">
+              <span className="font-display text-[20px] font-[700] tracking-[-0.025em] text-fg">
+                MEDCON
+              </span>
+              <span className="font-mono text-[10px] text-sage tracking-[0.2em]">2026</span>
             </span>
-            <span className="font-mono text-[10px] text-sage tracking-[0.2em]">2026</span>
-          </span>
-        </a>
+          </a>
+
+          {/* Host institution mark — TISB. Kept visible at all times since this
+              is their event; hidden on the smallest screens to avoid crowding
+              the mobile nav bar (still present via the Footer + mobile drawer). */}
+          <a
+            href={links.hostWebsiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Hosted by The International School Bangalore (TISB) — visit tisb.org"
+            className="hidden sm:flex items-center gap-2 ml-4 pl-4 border-l border-line"
+          >
+            <img src={tisbLogo} alt="" className="w-8 h-8 object-contain" width={32} height={32} />
+            <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-faint hidden lg:inline">
+              Hosted by TISB
+            </span>
+          </a>
+        </div>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-5 lg:gap-8">
