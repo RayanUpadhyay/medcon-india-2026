@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="MEDCON">
+  <rect width="32" height="32" rx="6" fill="#0C1018" />
+  <path
+    d="M7 23V9h3.4l5.6 8.2L21.6 9H25v14h-3.3v-8.3l-4.4 6.4h-2.6l-4.4-6.4V23H7Z"
+    fill="#EDE8DF"
+  />
+  <rect x="7" y="25" width="18" height="1.6" fill="#5A9488" />
+</svg>
