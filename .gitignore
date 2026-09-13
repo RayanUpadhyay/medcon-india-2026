@@ -18,3 +18,7 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
+
+# Local secrets — never commit
+.env
+.env.local

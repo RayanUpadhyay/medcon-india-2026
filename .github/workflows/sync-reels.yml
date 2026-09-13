@@ -1,10 +1,20 @@
 name: Sync Instagram reels
 
 on:
+  push:
+    branches: [main] # runs automatically on every push, no manual click needed.
+    # The auto-commit step below does NOT use "[skip ci]" in its message —
+    # that tag isn't just a GitHub Actions thing, Vercel also treats it as
+    # "skip deploying this commit", which silently prevented the reel data
+    # from ever reaching the live site even when the sync itself succeeded.
+    # Omitting it does mean this workflow's own commit re-triggers itself
+    # once more, but that second run finds nothing new to commit and exits
+    # immediately — harmless, not an infinite loop.
   schedule:
-    # Every 6 hours. Cron is UTC.
+    # Also runs every 6 hours even with no new pushes, to catch new reels
+    # posted between deploys. Cron is UTC.
     - cron: "0 */6 * * *"
-  workflow_dispatch: {} # lets you trigger it manually from the Actions tab
+  workflow_dispatch: {} # still available as a manual fallback from the Actions tab
 
 permissions:
   contents: write
@@ -31,10 +41,10 @@ jobs:
         run: |
           git config user.name "medcon-reel-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add src/content/reels.json
+          git add src/content/reels.json public/media/reels/ src/content/instagram-stats.json
           if git diff --cached --quiet; then
             echo "No new reels — nothing to commit."
           else
-            git commit -m "chore: sync latest Instagram reels [skip ci]"
+            git commit -m "chore: sync latest Instagram reels"
             git push
           fi
