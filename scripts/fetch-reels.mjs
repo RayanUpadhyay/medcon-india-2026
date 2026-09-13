@@ -130,6 +130,20 @@ async function downloadThumbnail(reel) {
 
     const buffer = Buffer.from(await res.arrayBuffer());
 
+    // A real photo thumbnail is at minimum several KB. Instagram's CDN can
+    // return a tiny placeholder/error image with a 200 status and a
+    // perfectly valid "image/jpeg" content-type — that passed the check
+    // above but is not an actual usable thumbnail (seen in the wild at
+    // ~130 bytes). Reject anything implausibly small rather than trust
+    // the content-type header alone.
+    const MIN_THUMBNAIL_BYTES = 2048;
+    if (buffer.length < MIN_THUMBNAIL_BYTES) {
+      throw new Error(
+        `Thumbnail is only ${buffer.length} bytes — almost certainly a broken/placeholder ` +
+          `image, not a real thumbnail. Rejecting.`,
+      );
+    }
+
     await mkdir(THUMB_DIR, { recursive: true });
     const filename = `${reel.id}.jpg`;
     await writeFile(path.join(THUMB_DIR, filename), buffer);
