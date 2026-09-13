@@ -65,16 +65,43 @@ async function fetchMedia() {
 }
 
 function toReel(item) {
-  // Reels are VIDEO media with media_product_type "REELS".
-  // thumbnail_url is the still frame; media_url on a reel is the raw video
-  // file, which we don't need for a link-out tile.
+  // IMPORTANT: only ever use thumbnail_url here, never media_url as a
+  // fallback. For a REELS item, media_url points at the raw MP4 video file,
+  // not an image — downloading it and saving it with a .jpg extension
+  // "succeeds" (no error) but produces an unplayable image file, which is
+  // exactly what caused reels to render as a broken-image icon even though
+  // the sync workflow reported success.
   return {
     id: item.id,
     permalink: item.permalink,
-    thumbnail: item.thumbnail_url ?? item.media_url ?? "",
+    thumbnail: item.thumbnail_url ?? "",
     caption: (item.caption ?? "").slice(0, 200),
     timestamp: item.timestamp,
   };
+}
+
+/**
+ * Instagram's Graph API sometimes omits thumbnail_url from the bulk
+ * /media list response specifically for REELS items (a known API quirk),
+ * even though the field is requested. When that happens, re-fetch that one
+ * item by ID, which usually returns it.
+ */
+async function fetchMissingThumbnail(reel) {
+  if (reel.thumbnail) return reel;
+
+  try {
+    const url =
+      `https://graph.instagram.com/${GRAPH_VERSION}/${reel.id}` +
+      `?fields=thumbnail_url&access_token=${IG_ACCESS_TOKEN}`;
+    const res = await fetch(url);
+    const body = await res.json();
+    if (res.ok && body.thumbnail_url) {
+      return { ...reel, thumbnail: body.thumbnail_url };
+    }
+  } catch {
+    // fall through — handled by the caller dropping reels with no thumbnail
+  }
+  return reel;
 }
 
 /**
@@ -85,11 +112,22 @@ function toReel(item) {
  * serve it ourselves from /public, exactly like the other real event photos.
  */
 async function downloadThumbnail(reel) {
-  if (!reel.thumbnail) return reel;
+  if (!reel.thumbnail) {
+    console.warn(`Reel ${reel.id} has no thumbnail_url at all — dropping it from the site.`);
+    return null;
+  }
 
   try {
     const res = await fetch(reel.thumbnail);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    // Verify we actually got an image back, not (e.g.) an HTML error page
+    // or — the earlier bug — a video file. Never trust the extension alone.
+    const contentType = res.headers.get("content-type") ?? "";
+    if (!contentType.startsWith("image/")) {
+      throw new Error(`Expected an image, got content-type "${contentType}"`);
+    }
+
     const buffer = Buffer.from(await res.arrayBuffer());
 
     await mkdir(THUMB_DIR, { recursive: true });
@@ -156,9 +194,11 @@ async function main() {
     .slice(0, MAX_REELS)
     .map(toReel);
 
-  const reelsWithLocalThumbnails = (await Promise.all(reels.map(downloadThumbnail))).filter(
-    Boolean,
-  );
+  const reelsWithThumbnailUrls = await Promise.all(reels.map(fetchMissingThumbnail));
+
+  const reelsWithLocalThumbnails = (
+    await Promise.all(reelsWithThumbnailUrls.map(downloadThumbnail))
+  ).filter(Boolean);
 
   // Here, an empty result is a deliberate outcome of the year filter (e.g.
   // no 2026 reels posted yet), so we DO write it — this is what clears out
