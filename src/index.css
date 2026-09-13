@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, 'Courier New', monospace;
+}
+
+/* ── Theme tokens ────────────────────────────────────────────────────────────
+ * Semantic colours live as CSS custom properties so the two themes share one
+ * source of truth. `:root` carries the DARK values and is the default — a
+ * document with no `data-theme` renders exactly the original MEDCON design.
+ * `:root[data-theme="light"]` overrides only what changes. The `@theme inline`
+ * block below exposes each token as a Tailwind utility (bg-bg, text-fg,
+ * border-line, text-sage …) that compiles to a `var()` reference, so switching
+ * themes is a pure attribute swap with no rebuild and no layout shift.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg: #0c1018; /* primary background */
+  --bg-alt: #0f141d; /* alternating section */
+  --bg-deep: #080c13; /* footer */
+  --bg-drawer: #0f1520; /* mobile nav drawer */
+  --panel: #141c29; /* cards / image placeholders */
+
+  /* Type hierarchy */
+  --fg: #ede8df; /* primary type */
+  --muted: #6a7882; /* body copy */
+  --muted-bright: #8a9aa8; /* emphasised body copy */
+  --faint: #3d5260; /* captions / meta */
+  --faint-2: #2a3a46; /* section eyebrows */
+  --faint-3: #253442; /* tertiary meta */
+  --faint-4: #1e2e3a; /* faintest — colophon */
+
+  /* Accents */
+  --sage: #5a9488;
+  --sage-bright: #6eaaa0;
+  --periwinkle: #7b8ec4;
+  --on-accent: #0c1018; /* type on a filled sage button */
+
+  /* Lines / dividers / raised fills */
+  --line: rgba(255, 255, 255, 0.06);
+  --line-2: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --line-stronger: rgba(255, 255, 255, 0.5);
+  --surface: rgba(255, 255, 255, 0.025);
+  --surface-2: rgba(255, 255, 255, 0.04);
+  --surface-faint: rgba(255, 255, 255, 0.01);
+
+  /* Decorative */
+  --scrollbar-thumb: rgba(237, 232, 223, 0.12);
+  --watermark: rgba(90, 148, 136, 0.05);
+  --glow-sage: rgba(90, 148, 136, 0.07);
+  --glow-peri: rgba(123, 142, 196, 0.06);
+
+  /* Image treatments */
+  --hero-img-opacity: 0.14;
+  --hero-img-blend: normal;
+  --event-img-opacity: 0.94;
+  --event-img-opacity-hover: 1;
+  --gallery-img-opacity: 0.94;
+  --gallery-img-opacity-hover: 1;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* Surfaces — warm paper, never pure white, so the editorial ground survives */
+  --bg: #f4f1ea;
+  --bg-alt: #ece7db;
+  --bg-deep: #e6e0d1;
+  --bg-drawer: #efeae0;
+  --panel: #e1dbca;
+
+  /* Type hierarchy — warm near-black down to a soft taupe */
+  --fg: #1a1e26;
+  --muted: #55514a;
+  --muted-bright: #6d6a62;
+  --faint: #8a8477;
+  --faint-2: #a49d8c;
+  --faint-3: #b1a996;
+  --faint-4: #bfb7a3;
+
+  /* Accents — darkened for contrast on paper, same hues */
+  --sage: #3f6f65;
+  --sage-bright: #325a51;
+  --periwinkle: #5566a0;
+  --on-accent: #f6f3ec;
+
+  /* Lines — low-opacity ink instead of white */
+  --line: rgba(26, 30, 38, 0.1);
+  --line-2: rgba(26, 30, 38, 0.14);
+  --line-strong: rgba(26, 30, 38, 0.24);
+  --line-stronger: rgba(26, 30, 38, 0.42);
+  --surface: rgba(26, 30, 38, 0.03);
+  --surface-2: rgba(26, 30, 38, 0.05);
+  --surface-faint: rgba(26, 30, 38, 0.016);
+
+  /* Decorative */
+  --scrollbar-thumb: rgba(26, 30, 38, 0.18);
+  --watermark: rgba(63, 111, 101, 0.08);
+  --glow-sage: rgba(63, 111, 101, 0.08);
+  --glow-peri: rgba(85, 102, 160, 0.07);
+
+  /* Image treatments — real event photography now, so keep these near
+   * full opacity rather than the moody wash used for the old stock photos. */
+  --hero-img-opacity: 0.1;
+  --hero-img-blend: multiply;
+  --event-img-opacity: 0.96;
+  --event-img-opacity-hover: 1;
+  --gallery-img-opacity: 0.96;
+  --gallery-img-opacity-hover: 1;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-alt: var(--bg-alt);
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-drawer: var(--bg-drawer);
+  --color-panel: var(--panel);
+
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-muted-bright: var(--muted-bright);
+  --color-faint: var(--faint);
+  --color-faint-2: var(--faint-2);
+  --color-faint-3: var(--faint-3);
+  --color-faint-4: var(--faint-4);
+
+  --color-sage: var(--sage);
+  --color-sage-bright: var(--sage-bright);
+  --color-periwinkle: var(--periwinkle);
+  --color-on-accent: var(--on-accent);
+
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-line-strong: var(--line-strong);
+  --color-line-stronger: var(--line-stronger);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-faint: var(--surface-faint);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Offset in-page anchors so section headings clear the fixed nav. */
+  scroll-padding-top: 68px;
+}
+
+/* Thin, unobtrusive scrollbar — visible enough to signal scrollability. */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Visible, on-brand focus ring for keyboard users only. */
+:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* ── Image treatments ──────────────────────────────────────────────────────
+ * Opacity / blend are theme tokens so each mode gets a considered wash rather
+ * than the same value on opposite grounds.
+ */
+.hero-bg-img {
+  opacity: var(--hero-img-opacity);
+  mix-blend-mode: var(--hero-img-blend);
+}
+
+.event-img {
+  opacity: var(--event-img-opacity);
+}
+.group:hover .event-img {
+  opacity: var(--event-img-opacity-hover);
+}
+
+.gallery-img {
+  opacity: var(--gallery-img-opacity);
+}
+.group:hover .gallery-img {
+  opacity: var(--gallery-img-opacity-hover);
+}
+
+/* Scroll-reveal: hidden initial state only applies when motion is allowed
+ * and JS has marked the document ready. */
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.js-reveal [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js-reveal [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
