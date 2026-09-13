@@ -99,6 +99,19 @@ export default function Footer() {
                 ))}
               </span>
             </address>
+            {footer.venueMapEmbedUrl && (
+              <div className="mt-4 rounded-md overflow-hidden border border-line">
+                <iframe
+                  src={footer.venueMapEmbedUrl}
+                  title="Map to The International School Bangalore (TISB)"
+                  width="100%"
+                  height="140"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            )}
           </div>
         </div>
 

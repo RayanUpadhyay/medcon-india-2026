@@ -75,36 +75,36 @@ export type GalleryImage = {
   tall: boolean;
 };
 
-/* PLACEHOLDER: stock photography standing in for MEDCON event photos. */
+/* Real MEDCON event photography (added Sept 2026, replacing stock photos). */
 export const gallery: GalleryImage[] = [
   {
-    src: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=700&h=900&fit=crop&auto=format&q=75",
-    alt: "Surgeons at work in an operating theatre",
+    src: "/media/gallery/auditorium-25-years.jpg",
+    alt: "TISB auditorium ahead of the MEDCON panel session",
     tall: true,
   },
   {
-    src: "https://images.unsplash.com/photo-1579684453423-f84349ef60b0?w=700&h=500&fit=crop&auto=format&q=75",
-    alt: "Medical team during a procedure",
+    src: "/media/gallery/stage-group-handshake.jpg",
+    alt: "Organizers and guests greeting each other on stage at MEDCON",
     tall: false,
   },
   {
-    src: "https://images.unsplash.com/photo-1612886649688-ef2912f17921?w=700&h=500&fit=crop&auto=format&q=75",
-    alt: "Clinician reviewing notes on a tablet",
+    src: "/media/gallery/panel-discussion-wide.jpg",
+    alt: "Panelists seated together during the MEDCON panel discussion",
     tall: false,
   },
   {
-    src: "https://images.unsplash.com/photo-1550831107-1553da8c8464?w=700&h=900&fit=crop&auto=format&q=75",
-    alt: "Doctor in a hospital corridor",
+    src: "/media/gallery/stage-gift-exchange.jpg",
+    alt: "A token of appreciation being presented to a guest speaker on stage",
     tall: true,
   },
   {
-    src: "https://images.unsplash.com/photo-1781029711378-e17c0c6bd0d1?w=700&h=500&fit=crop&auto=format&q=75",
-    alt: "Attendees seated at a conference session",
+    src: "/media/gallery/panel-stage-wide.jpg",
+    alt: "Wide view of the MEDCON panel on stage under stage lighting",
     tall: false,
   },
   {
-    src: "https://images.unsplash.com/photo-1782388716252-d598f84ea62f?w=700&h=500&fit=crop&auto=format&q=75",
-    alt: "Students working together with laptops",
+    src: "/media/gallery/panel-activity-slide.jpg",
+    alt: "A panelist speaking with the day's activity schedule projected behind",
     tall: false,
   },
 ];
@@ -136,8 +136,8 @@ export const hero = {
 
   /** PLACEHOLDER: event logistics, all unverified. */
   details: [
-    { label: "Date", value: "March 2026" },
-    { label: "Time", value: "7:30 AM — 2:30 PM" },
+    { label: "Date", value: "September 19, 2026" },
+    { label: "Time", value: "7:15 AM — 3:00 PM" },
     { label: "Venue", value: "TISB, Bangalore" },
     { label: "Eligibility", value: "Grades 8 – 12" },
     { label: "Entry", value: "Free" },
@@ -297,11 +297,21 @@ export const footer = {
   navHeading: "Navigate",
   contactHeading: "Contact",
   venueHeading: "Venue",
-  /** PLACEHOLDER: venue address, unverified. */
+  /** Venue address, confirmed by MEDCON organizing team (Sept 2026). */
   venue: {
-    name: "The International School Bangalore",
-    lines: ["NAFL Valley,", "Whitefield–Sarjapur Road,", "Bangalore 562125"],
+    name: "The International School Bangalore (TISB)",
+    lines: [
+      "NAFL Valley Circle,",
+      "Sarjapur - Marathahalli Rd, near Dommasandra,",
+      "Whitefield, Thigala Chowdadenahalli,",
+      "Karnataka 562125",
+    ],
   },
+  /** Google Maps "no API key" embed — built from the venue address above.
+   *  If the venue ever changes, regenerate this by URL-encoding the new
+   *  address into https://www.google.com/maps?q=<address>&output=embed */
+  venueMapEmbedUrl:
+    "https://www.google.com/maps?q=NAFL+Valley+Circle,+Sarjapur+-+Marathahalli+Rd,+near+Dommasandra,+Whitefield,+Thigala+Chowdadenahalli,+Karnataka+562125&output=embed",
   copyright: "© 2026 MEDCON India · The International School Bangalore",
   legalLinks: [
     { label: "Privacy Policy", href: "#" },
