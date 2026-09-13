@@ -133,26 +133,6 @@ export default function Hero() {
           </dl>
         </div>
       </div>
-
-      {/* Bottom credits strip */}
-      <div className="relative z-10 border-t border-line">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-4 flex flex-wrap gap-x-8 gap-y-2 items-center">
-          {hero.credits.map((item, i) => (
-            <span
-              key={item}
-              className="font-mono text-[10px] tracking-[0.18em] uppercase text-faint flex items-center"
-            >
-              {i > 0 && (
-                <span
-                  aria-hidden="true"
-                  className="hidden md:inline-block w-px h-3 bg-line-2 mr-8"
-                />
-              )}
-              {item}
-            </span>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }

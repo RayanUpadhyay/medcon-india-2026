@@ -9,9 +9,14 @@ export default function Sponsors() {
           <SectionLabel index={sectionLabels.sponsors.index} label={sectionLabels.sponsors.label} />
         </div>
 
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line mb-20 md:mb-24 list-none p-0 m-0">
+        <ul className="flex flex-wrap gap-px bg-line mb-20 md:mb-24 list-none p-0 m-0">
           {partners.map((p, i) => (
-            <Reveal as="li" key={p.name} delay={i * 70} className="bg-bg-alt p-10">
+            <Reveal
+              as="li"
+              key={p.name}
+              delay={i * 70}
+              className="bg-bg-alt p-10 flex-1 min-w-[240px]"
+            >
               <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-sage mb-5">
                 {p.tier}
               </div>

@@ -49,7 +49,7 @@ export default function Gallery() {
         <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#3D5260] mb-6">
           Event Day — 2025
         </p>
-        <ul className="grid grid-cols-2 md:grid-cols-3 gap-px bg-line list-none p-0 m-0">
+        <ul className="flex flex-wrap gap-px bg-line list-none p-0 m-0">
           {gallery.map((g) => {
             const inner = (
               <img
@@ -63,7 +63,7 @@ export default function Gallery() {
             return (
               <li
                 key={g.src}
-                className={`bg-bg overflow-hidden ${g.tall ? "aspect-[3/4]" : "aspect-[4/3]"}`}
+                className="bg-bg overflow-hidden aspect-[4/3] flex-1 basis-[280px] min-w-[220px]"
               >
                 {hasInstagram ? (
                   <a
@@ -88,9 +88,12 @@ export default function Gallery() {
             <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#3D5260] mb-6">
               From Instagram
             </p>
-            <ul className="grid grid-cols-2 md:grid-cols-4 gap-px bg-line list-none p-0 m-0">
+            <ul className="flex flex-wrap gap-px bg-line list-none p-0 m-0">
               {reels.map((reel) => (
-                <li key={reel.id} className="bg-bg overflow-hidden aspect-[9/16]">
+                <li
+                  key={reel.id}
+                  className="bg-bg overflow-hidden aspect-[9/16] flex-1 basis-[160px] min-w-[140px] max-w-[220px]"
+                >
                   <a
                     href={reel.permalink}
                     target="_blank"

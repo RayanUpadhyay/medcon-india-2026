@@ -71,8 +71,6 @@ export const images = {
 export type GalleryImage = {
   src: string;
   alt: string;
-  /** When true the image occupies a taller cell in the mosaic. */
-  tall: boolean;
 };
 
 /* Real MEDCON event photography (added Sept 2026, replacing stock photos). */
@@ -80,32 +78,26 @@ export const gallery: GalleryImage[] = [
   {
     src: "/media/gallery/auditorium-25-years.jpg",
     alt: "TISB auditorium ahead of the MEDCON panel session",
-    tall: true,
   },
   {
     src: "/media/gallery/stage-group-handshake.jpg",
     alt: "Organizers and guests greeting each other on stage at MEDCON",
-    tall: false,
   },
   {
     src: "/media/gallery/panel-discussion-wide.jpg",
     alt: "Panelists seated together during the MEDCON panel discussion",
-    tall: false,
   },
   {
     src: "/media/gallery/stage-gift-exchange.jpg",
     alt: "A token of appreciation being presented to a guest speaker on stage",
-    tall: true,
   },
   {
     src: "/media/gallery/panel-stage-wide.jpg",
     alt: "Wide view of the MEDCON panel on stage under stage lighting",
-    tall: false,
   },
   {
     src: "/media/gallery/panel-activity-slide.jpg",
     alt: "A panelist speaking with the day's activity schedule projected behind",
-    tall: false,
   },
 ];
 
@@ -144,13 +136,6 @@ export const hero = {
     { label: "Eligibility", value: "Grades 8 – 12" },
     { label: "Entry", value: "₹250" },
   ] as { label: string; value: string }[],
-
-  /** PLACEHOLDER: certifications / partnerships, all unverified. */
-  credits: [
-    "Govt. of Karnataka Certified CPR Training",
-    "Supported by Manipal Hospitals",
-    "Project Suryanayak",
-  ],
 };
 
 /* ── About ───────────────────────────────────────────────────────────────── */
@@ -267,10 +252,7 @@ export type Partner = {
 
 /* PLACEHOLDER: no sponsor or partner listed here is confirmed. */
 export const partners: Partner[] = [
-  { tier: "Title Sponsor", name: "Manipal Hospitals", note: "India's premier hospital network" },
   { tier: "Sponsor", name: "Medvital Venture", note: "" },
-  { tier: "Government Affiliate", name: "Karnataka Health Dept.", note: "State Certification Authority" },
-  { tier: "Programme Partner", name: "Project Suryanayak", note: "CPR Awareness Initiative" },
   { tier: "Host Institution", name: "TISB", note: "The International School Bangalore" },
 ];
 
