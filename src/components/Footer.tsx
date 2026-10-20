@@ -93,6 +93,12 @@ export default function Footer() {
               >
                 {links.contactEmail}
               </a>
+              <a
+                href={links.schoolPhoneHref}
+                className="font-sans text-[14px] text-faint hover:text-fg transition-colors"
+              >
+                {links.schoolPhoneLabel}
+              </a>
               {links.hostWebsiteUrl && (
                 <a
                   href={links.hostWebsiteUrl}

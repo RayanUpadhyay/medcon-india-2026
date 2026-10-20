@@ -1,4 +1,4 @@
-import { footer, sectionLabels } from "@/content/site";
+import { footer, links, sectionLabels } from "@/content/site";
 import { Reveal, SectionLabel } from "@/components/primitives";
 
 export default function Venue() {
@@ -25,6 +25,11 @@ export default function Venue() {
                 </span>
               ))}
             </address>
+            <p className="font-sans text-[16px] text-muted leading-[1.9] mt-4">
+              <a href={links.schoolPhoneHref} className="hover:text-sage transition-colors">
+                {links.schoolPhoneLabel}
+              </a>
+            </p>
           </Reveal>
 
           {footer.venueMapEmbedUrl && (

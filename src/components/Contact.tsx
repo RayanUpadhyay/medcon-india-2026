@@ -49,6 +49,24 @@ export default function Contact() {
               </a>
             </Reveal>
           )}
+
+          <Reveal delay={140} className="bg-bg border border-line p-10 md:p-14 flex-1 min-w-[260px]">
+            <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-sage mb-5">
+              Phone
+            </p>
+            <h3
+              className="font-display font-[600] text-fg leading-[1.2] mb-4"
+              style={{ fontSize: "clamp(20px, 2.2vw, 26px)" }}
+            >
+              Call the school
+            </h3>
+            <a
+              href={links.schoolPhoneHref}
+              className="font-sans text-[15px] text-muted hover:text-sage transition-colors"
+            >
+              {links.schoolPhoneLabel}
+            </a>
+          </Reveal>
         </div>
       </div>
     </section>

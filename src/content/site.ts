@@ -38,6 +38,10 @@ export const links = {
   /** PLACEHOLDER: host institution website, unverified. */
   hostWebsiteLabel: "tisb.org",
   hostWebsiteUrl: "https://www.tisb.org",
+
+  /** TISB school contact number, as published on tisb.org. */
+  schoolPhoneLabel: "+91 80 6723 5900",
+  schoolPhoneHref: "tel:+918067235900",
 } as const;
 
 /* ── Images ───────────────────────────────────────────────────────────────
@@ -130,7 +134,7 @@ export const hero = {
 
   /** PLACEHOLDER: event logistics, all unverified. */
   details: [
-    { label: "Date", value: "September 19, 2026" },
+    { label: "Date", value: "October 31, 2026" },
     { label: "Time", value: "7:15 AM — 3:00 PM" },
     { label: "Venue", value: "TISB, Bangalore" },
     { label: "Eligibility", value: "Grades 8 – 12" },
@@ -144,7 +148,7 @@ export const about = {
     "India's first student-led medical conference — built for the next generation of healers.",
   /** Official MEDCON 2026 description, provided by the organizing team. */
   paragraphs: [
-    "MedCon is India's first student-led medical conference, happening on Saturday, September 19th, 2026. The conference covers a range of important topics in medicine through workshops, debates, and panel discussions. This year's theme of \"Beyond The White Coat\" focuses on the many disciplines and perspectives that shape healthcare, going beyond traditional medicine.",
+    "MedCon is India's first student-led medical conference, happening on Saturday, October 31st, 2026. The conference covers a range of important topics in medicine through workshops, debates, and panel discussions. This year's theme of \"Beyond The White Coat\" focuses on the many disciplines and perspectives that shape healthcare, going beyond traditional medicine.",
     "The student competition helps test all you've learnt throughout the day, involving participants presenting unique solutions to important medicinal problems. The prizes include internships and shadowing opportunities alongside the professionals speaking at the conference. Make sure you register soon to secure your spot — we hope to see you there!",
   ],
   missionLabel: "Mission",
@@ -202,7 +206,7 @@ export const events: ProgrammeEvent[] = [
 /* PLACEHOLDER: programme summary details, unverified. */
 export const eventDetails = [
   { label: "Format", value: "Workshops · Panels · Competitions" },
-  { label: "Dress Code", value: "Formal Western / School Uniform" },
+  { label: "Dress Code", value: "School Uniform only" },
   { label: "Certification", value: "State-Certified CPR Training" },
   { label: "Awards", value: "Best Student Life Saver 2026" },
 ];
