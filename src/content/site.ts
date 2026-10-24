@@ -211,6 +211,33 @@ export const eventDetails = [
   { label: "Awards", value: "Best Student Life Saver 2026" },
 ];
 
+/* ── Itinerary ───────────────────────────────────────────────────────────── */
+export type ItineraryItem = {
+  time: string;
+  title: string;
+  venue: string;
+  /** Main sessions are emphasised; breaks and logistics stay quiet. */
+  main?: boolean;
+};
+
+/* Official event-day schedule. Keep the date in sync with hero.details, the
+ * About text and the structured data in index.html. */
+export const itinerary = {
+  label: "Saturday, 31 October 2026",
+  title: "Event itinerary",
+  items: [
+    { time: "7:15am – 7:50am", title: "Registration", venue: "In front of Old PY block entrance" },
+    { time: "8:00am – 8:25am", title: "Opening ceremony", venue: "Admin auditorium", main: true },
+    { time: "8:30am – 10:00am", title: "Event 1: Medical Skills Workshop", venue: "Admin auditorium area", main: true },
+    { time: "10:00am – 10:15am", title: "Short break and arrival of panelists", venue: "Galleria" },
+    { time: "10:15am – 10:30am", title: "Refreshments for panelists", venue: "Galleria" },
+    { time: "10:30am – 12:00pm", title: "Event 2: Panel discussion", venue: "Admin auditorium", main: true },
+    { time: "12:30pm – 1:00pm", title: "Lunch", venue: "School cafeteria" },
+    { time: "1:15pm – 2:15pm", title: "Event 3: Code Blue – Student Competition", venue: "Admin auditorium", main: true },
+    { time: "2:30pm – 3:00pm", title: "Closing ceremony and prize distribution", venue: "Admin auditorium", main: true },
+  ] as ItineraryItem[],
+};
+
 /* ── Panel ───────────────────────────────────────────────────────────────── */
 export type Panelist = {
   name: string;

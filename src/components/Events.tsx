@@ -1,4 +1,4 @@
-import { eventDetails, events, sectionLabels } from "@/content/site";
+import { eventDetails, events, itinerary, sectionLabels } from "@/content/site";
 import { ACCENT_HEX } from "@/lib/accents";
 import { Reveal, SectionLabel } from "@/components/primitives";
 
@@ -94,6 +94,60 @@ export default function Events() {
             </div>
           ))}
         </dl>
+
+        {/* Itinerary */}
+        <Reveal className="mt-20 md:mt-28">
+          <p className="font-mono text-[11px] tracking-[0.14em] text-sage mb-3">{itinerary.label}</p>
+          <h3
+            className="font-display font-[600] text-fg leading-[1.1] tracking-[-0.02em] mb-8"
+            style={{ fontSize: "clamp(22px, 2.6vw, 32px)" }}
+          >
+            {itinerary.title}
+          </h3>
+
+          <div
+            aria-hidden="true"
+            className="hidden md:grid grid-cols-[180px_minmax(0,1fr)_240px] gap-6 px-6 py-3 bg-surface border border-line font-mono text-[10px] tracking-[0.16em] uppercase text-faint"
+          >
+            <span>Timing</span>
+            <span>Event</span>
+            <span>Venue</span>
+          </div>
+
+          <ol className="list-none p-0 m-0 border border-line md:border-t-0">
+            {itinerary.items.map((it) => (
+              <li
+                key={it.time}
+                className="relative grid grid-cols-1 md:grid-cols-[180px_minmax(0,1fr)_240px] gap-x-6 gap-y-1 px-6 py-4 border-b border-line last:border-b-0"
+              >
+                {it.main && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 top-0 bottom-0 w-[2px] bg-sage"
+                  />
+                )}
+                <span
+                  className={`font-mono text-[12px] tracking-[0.04em] ${
+                    it.main ? "text-sage" : "text-faint"
+                  }`}
+                >
+                  {it.time}
+                </span>
+                <span
+                  className={`font-sans text-[14px] leading-[1.5] ${
+                    it.main ? "text-fg font-[600]" : "text-muted"
+                  }`}
+                >
+                  {it.title}
+                </span>
+                <span className="font-sans text-[13px] leading-[1.5] text-faint">
+                  <span className="sr-only">Venue: </span>
+                  {it.venue}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </Reveal>
       </div>
     </section>
   );
