@@ -107,6 +107,8 @@ export default function Hero() {
             <div id="register" className="flex flex-wrap items-center gap-4 scroll-mt-24">
               <a
                 href={links.register}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-sans text-[12px] tracking-[0.14em] uppercase px-8 py-4 bg-sage text-on-accent font-[700] hover:bg-sage-bright transition-colors duration-200"
               >
                 {hero.ctaPrimary}

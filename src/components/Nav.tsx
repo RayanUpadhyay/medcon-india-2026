@@ -119,6 +119,8 @@ export default function Nav() {
           />
           <a
             href={links.register}
+            target="_blank"
+            rel="noopener noreferrer"
             className="font-sans text-[12px] tracking-[0.14em] uppercase px-5 py-2.5 border border-sage text-sage hover:bg-sage hover:text-on-accent transition-colors duration-200 font-[600]"
           >
             Register
@@ -181,6 +183,8 @@ export default function Nav() {
           />
           <a
             href={links.register}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
             className="mt-4 font-sans text-[13px] tracking-[0.12em] uppercase py-3.5 border border-sage text-sage text-center font-[600]"
           >

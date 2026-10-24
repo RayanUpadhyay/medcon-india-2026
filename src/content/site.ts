@@ -22,10 +22,8 @@
  * do not scatter new URLs through the components.
  */
 export const links = {
-  /** PLACEHOLDER: official registration URL is not available yet.
-   *  `#register` scrolls to the hero registration block as a safe fallback.
-   *  Replace with the real URL (e.g. a form or ticketing page) when ready. */
-  register: "#register",
+  /** Official registration page, hosted by TISB. */
+  register: "https://events.tisb.org/medcon26/",
 
   /** PLACEHOLDER: partnership / general enquiries address, unverified. */
   contactEmail: "medcon@tisb.ac.in",
