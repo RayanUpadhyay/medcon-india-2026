@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import logo from "@/imports/image.png";
 import tisbLogo from "@/imports/tisb-logo.png";
-import { links, navLinks } from "@/content/site";
+import { footer, links, navLinks } from "@/content/site";
 import { useActiveSection, useScrolled, useTheme } from "@/lib/hooks";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -51,6 +51,24 @@ export default function Nav() {
           : "bg-transparent border-b border-transparent"
       }`}
     >
+      {/* Developer credit: a slim strip above the nav row that folds away on
+          scroll, so it never takes up header space while you're reading. */}
+      <div
+        inert={scrolled}
+        className={`overflow-hidden transition-[max-height,opacity] duration-300 ${
+          scrolled ? "max-h-0 opacity-0" : "max-h-[33px] opacity-100"
+        }`}
+      >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-8 flex items-center justify-end">
+          <a
+            href={`mailto:${footer.credit.email}`}
+            className="font-mono text-[11px] text-faint-3 hover:text-faint tracking-[0.12em] transition-colors"
+          >
+            {footer.credit.label}
+          </a>
+        </div>
+        <div className="h-px bg-line" />
+      </div>
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-[68px] flex items-center justify-between">
         <div className="flex items-center flex-shrink-0">
           <a href="#top" className="flex items-center gap-3" aria-label="MEDCON 2026 — home">

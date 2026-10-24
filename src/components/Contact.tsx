@@ -1,4 +1,4 @@
-import { links, sectionLabels } from "@/content/site";
+import { footer, links, sectionLabels } from "@/content/site";
 import { Reveal, SectionLabel } from "@/components/primitives";
 
 export default function Contact() {
@@ -68,6 +68,16 @@ export default function Contact() {
             </a>
           </Reveal>
         </div>
+
+        <p className="mt-6 font-mono text-[11px] tracking-[0.08em] text-faint-3">
+          Contact the dev:{" "}
+          <a
+            href={`mailto:${footer.credit.email}`}
+            className="text-sage hover:text-sage-bright transition-colors"
+          >
+            {footer.credit.email}
+          </a>
+        </p>
       </div>
     </section>
   );

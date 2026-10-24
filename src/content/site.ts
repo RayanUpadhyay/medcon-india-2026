@@ -291,11 +291,11 @@ export const footer = {
   venueMapEmbedUrl:
     "https://www.google.com/maps?q=NAFL+Valley,+Whitefield+-+Sarjapur+Road,+Near+Dommasandra+Circle,+Bangalore+562125,+Karnataka,+India&output=embed",
   copyright: "© 2026 MEDCON India · The International School Bangalore",
-  /** Discreet developer colophon in the footer bottom bar. The address is used
-   *  only as the mailto target and is never rendered as text. */
+  /** Developer credit: shown as a slim strip above the nav, and the address
+   *  is shown in the Contact section ("Contact the dev"). */
   credit: {
     label: "Site by Rayan Upadhyay",
-    email: "RayanUpadhyay@gmail.com",
+    email: "rayanupadhyay@gmail.com",
   },
 };
 
