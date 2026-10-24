@@ -69,11 +69,11 @@ export default function Contact() {
           </Reveal>
         </div>
 
-        <p className="mt-6 font-mono text-[11px] tracking-[0.08em] text-faint-3">
+        <p className="mt-6 font-mono text-[11px] tracking-[0.08em] text-fg">
           Contact the dev:{" "}
           <a
             href={`mailto:${footer.credit.email}`}
-            className="text-sage hover:text-sage-bright transition-colors"
+            className="text-fg hover:text-sage transition-colors"
           >
             {footer.credit.email}
           </a>

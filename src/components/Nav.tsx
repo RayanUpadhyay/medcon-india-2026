@@ -62,7 +62,7 @@ export default function Nav() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-8 flex items-center justify-end">
           <a
             href={`mailto:${footer.credit.email}`}
-            className="font-mono text-[11px] text-faint-3 hover:text-faint tracking-[0.12em] transition-colors"
+            className="font-mono text-[11px] text-fg hover:text-sage tracking-[0.12em] transition-colors"
           >
             {footer.credit.label}
           </a>
