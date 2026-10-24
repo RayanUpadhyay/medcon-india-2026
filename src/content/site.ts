@@ -174,7 +174,7 @@ export const events: ProgrammeEvent[] = [
     num: "01",
     category: "Hands-On Training",
     title: "Medical Skills Workshop",
-    body: "Receive personalized CPR and medical skills instruction leading to State Certification from the Government of Karnataka. This is real skill acquisition — not theory.",
+    body: "Receive personalized CPR and medical skills instruction leading to State Certification from the Government of Karnataka. This is real skill acquisition — not theory. Led by Dr. Affan Akbar, Consultant in Emergency Medicine at Manipal Hospital Sarjapur Road.",
     tag: "Govt. of Karnataka Certified",
     accent: "sage",
     image: images.eventWorkshop,
@@ -241,6 +241,8 @@ export type Panelist = {
   name: string;
   role: string;
   institution: string;
+  /** Shown as a small tag when someone is here for something other than the panel. */
+  session?: string;
 };
 
 /* Confirmed MEDCON 2026 panelists (added Sept 2026). More speakers may be
@@ -268,6 +270,27 @@ export const panel = {
       name: "Mr. Amol Kulkarni",
       role: "Biomedical Researcher",
       institution: "",
+    },
+    {
+      name: "Dr. Ajay Simha",
+      role: "Consultant, Surgical Oncology",
+      institution: "Manipal Hospital Sarjapur Road",
+    },
+    {
+      name: "Dr. Magesh Balakrishna",
+      role: "Consultant, Cardiology",
+      institution: "Manipal Hospital Sarjapur Road",
+    },
+    {
+      name: "Dr. Jyothi Ranganathan",
+      role: "Consultant, Pathology",
+      institution: "Manipal Hospital Sarjapur Road",
+    },
+    {
+      name: "Dr. Affan Akbar",
+      role: "Consultant, Emergency Medicine",
+      institution: "Manipal Hospital Sarjapur Road",
+      session: "Leads CPR, BLS & First Aid training",
     },
   ] as Panelist[],
 };
