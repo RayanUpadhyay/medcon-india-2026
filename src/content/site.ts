@@ -267,11 +267,6 @@ export const panel = {
       institution: "",
     },
     {
-      name: "Mr. Amol Kulkarni",
-      role: "Biomedical Researcher",
-      institution: "",
-    },
-    {
       name: "Dr. Ajay Simha",
       role: "Consultant, Surgical Oncology",
       institution: "Manipal Hospital Sarjapur Road",
