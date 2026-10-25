@@ -245,16 +245,13 @@ export type Panelist = {
   session?: string;
 };
 
-/* Confirmed MEDCON 2026 panelists (added Sept 2026). More speakers may be
- * announced closer to the event — update this list and the disclaimer below
- * as further names are confirmed. */
+/* Confirmed MEDCON 2026 speakers. Add new people to the list below, and give
+ * anyone who isn't on the panel a `session` tag so the card says why they're here. */
 export const panel = {
   titleLead: "The Modern",
   titleTail: "Health Paradox",
   intro:
     "A curated panel of medical professionals, researchers, and entrepreneurs examining the contradictions that define healthcare today — where access, technology, equity, and innovation collide and converge.",
-  disclaimer:
-    "* Additional panelists to be announced closer to the event.",
   panelists: [
     {
       name: "Ms. Shilpi Saraswat",

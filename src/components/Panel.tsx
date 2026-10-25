@@ -57,10 +57,6 @@ export default function Panel() {
             </Reveal>
           ))}
         </ul>
-
-        <p className="mt-px border border-line border-t-0 px-8 py-5 bg-surface-faint font-mono text-[10px] tracking-[0.14em] text-faint-2">
-          {panel.disclaimer}
-        </p>
       </div>
     </section>
   );
