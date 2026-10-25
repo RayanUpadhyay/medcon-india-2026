@@ -41,7 +41,7 @@ jobs:
         run: |
           git config user.name "medcon-reel-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add src/content/reels.json public/media/reels/ src/content/instagram-stats.json
+          git add src/content/reels.json src/content/posts.json public/media/reels/ public/media/posts/ src/content/instagram-stats.json
           if git diff --cached --quiet; then
             echo "No new reels — nothing to commit."
           else

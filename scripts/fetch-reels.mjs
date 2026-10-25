@@ -1,8 +1,12 @@
 // scripts/fetch-reels.mjs
 //
-// Pulls the latest reels from the @medconindia Instagram account via the
-// Instagram Graph API (API setup with Instagram Login) and writes them to
-// src/content/reels.json, which the site imports directly.
+// Pulls the latest reels AND regular posts (single images, carousels) from the
+// @medconindia Instagram account via the Instagram Graph API (API setup with
+// Instagram Login). Writes:
+//   src/content/reels.json  + public/media/reels/*.jpg
+//   src/content/posts.json  + public/media/posts/*.jpg
+//   src/content/instagram-stats.json
+// which the site imports directly.
 //
 // Run manually:
 //   IG_USER_ID=17841472014740873 IG_ACCESS_TOKEN=xxxx node scripts/fetch-reels.mjs
@@ -16,16 +20,23 @@ import path from "node:path";
 
 const IG_USER_ID = process.env.IG_USER_ID;
 const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
-const MAX_REELS = 6;
-const OUTPUT_PATH = path.resolve("src/content/reels.json");
-const STATS_OUTPUT_PATH = path.resolve("src/content/instagram-stats.json");
-const THUMB_DIR = path.resolve("public/media/reels");
-const THUMB_URL_PREFIX = "/media/reels";
 const GRAPH_VERSION = "v24.0";
-// Only pull reels posted for THIS year's event — keeps last year's
-// (2025) reels from showing up alongside 2026 content. Bump this each
-// year, or change to a cutoff date if you want more control.
+
+const MAX_REELS = 6;
+const MAX_POSTS = 6;
+// Only pull content posted for THIS year's event — keeps last year's (2025)
+// content from showing up alongside 2026. Bump this each year.
 const MIN_YEAR = 2026;
+// A real photo is at minimum several KB. Instagram's CDN can return a tiny
+// placeholder with a 200 status and a valid image content-type (seen at ~130
+// bytes), so never trust the content-type header alone.
+const MIN_IMAGE_BYTES = 2048;
+
+const REELS_JSON = path.resolve("src/content/reels.json");
+const POSTS_JSON = path.resolve("src/content/posts.json");
+const STATS_JSON = path.resolve("src/content/instagram-stats.json");
+const REEL_DIR = path.resolve("public/media/reels");
+const POST_DIR = path.resolve("public/media/posts");
 
 if (!IG_USER_ID || !IG_ACCESS_TOKEN) {
   console.error(
@@ -35,194 +46,154 @@ if (!IG_USER_ID || !IG_ACCESS_TOKEN) {
   process.exit(1);
 }
 
-/** @typedef {{ id: string; permalink: string; thumbnail: string; caption: string; timestamp: string }} Reel */
+async function graphGet(endpoint, params) {
+  const qs = new URLSearchParams({ ...params, access_token: IG_ACCESS_TOKEN });
+  const res = await fetch(`https://graph.instagram.com/${GRAPH_VERSION}/${endpoint}?${qs}`);
+  return { ok: res.ok, body: await res.json() };
+}
 
 async function fetchMedia() {
-  const fields = [
-    "id",
-    "caption",
-    "media_type",
-    "media_product_type",
-    "thumbnail_url",
-    "media_url",
-    "permalink",
-    "timestamp",
-  ].join(",");
-
-  const url =
-    `https://graph.instagram.com/${GRAPH_VERSION}/${IG_USER_ID}/media` +
-    `?fields=${fields}&access_token=${IG_ACCESS_TOKEN}&limit=25`;
-
-  const res = await fetch(url);
-  const body = await res.json();
-
-  if (!res.ok) {
+  const { ok, body } = await graphGet(`${IG_USER_ID}/media`, {
+    fields: "id,caption,media_type,media_product_type,thumbnail_url,media_url,permalink,timestamp",
+    limit: "50",
+  });
+  if (!ok) {
     console.error("Instagram API error:", JSON.stringify(body, null, 2));
     process.exit(1);
   }
-
   return body.data ?? [];
 }
 
-function toReel(item) {
-  // IMPORTANT: only ever use thumbnail_url here, never media_url as a
-  // fallback. For a REELS item, media_url points at the raw MP4 video file,
-  // not an image — downloading it and saving it with a .jpg extension
-  // "succeeds" (no error) but produces an unplayable image file, which is
-  // exactly what caused reels to render as a broken-image icon even though
-  // the sync workflow reported success.
-  return {
-    id: item.id,
-    permalink: item.permalink,
-    thumbnail: item.thumbnail_url ?? "",
-    caption: (item.caption ?? "").slice(0, 200),
-    timestamp: item.timestamp,
-  };
-}
-
-/**
- * Instagram's Graph API sometimes omits thumbnail_url from the bulk
- * /media list response specifically for REELS items (a known API quirk),
- * even though the field is requested. When that happens, re-fetch that one
- * item by ID, which usually returns it.
- */
-async function fetchMissingThumbnail(reel) {
-  if (reel.thumbnail) return reel;
-
-  try {
-    const url =
-      `https://graph.instagram.com/${GRAPH_VERSION}/${reel.id}` +
-      `?fields=thumbnail_url&access_token=${IG_ACCESS_TOKEN}`;
-    const res = await fetch(url);
-    const body = await res.json();
-    if (res.ok && body.thumbnail_url) {
-      return { ...reel, thumbnail: body.thumbnail_url };
-    }
-  } catch {
-    // fall through — handled by the caller dropping reels with no thumbnail
-  }
-  return reel;
-}
-
-/**
- * Instagram's thumbnail_url is a SIGNED URL that expires (often within a day
- * or two) — it is NOT a stable link. Hotlinking it directly caused reel
- * thumbnails to silently break shortly after each sync, leaving broken-image
- * gaps on the live site. Instead, download each thumbnail once per run and
- * serve it ourselves from /public, exactly like the other real event photos.
- */
-async function downloadThumbnail(reel) {
-  if (!reel.thumbnail) {
-    console.warn(`Reel ${reel.id} has no thumbnail_url at all — dropping it from the site.`);
-    return null;
-  }
-
-  try {
-    const res = await fetch(reel.thumbnail);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    // Verify we actually got an image back, not (e.g.) an HTML error page
-    // or — the earlier bug — a video file. Never trust the extension alone.
-    const contentType = res.headers.get("content-type") ?? "";
-    if (!contentType.startsWith("image/")) {
-      throw new Error(`Expected an image, got content-type "${contentType}"`);
-    }
-
-    const buffer = Buffer.from(await res.arrayBuffer());
-
-    // A real photo thumbnail is at minimum several KB. Instagram's CDN can
-    // return a tiny placeholder/error image with a 200 status and a
-    // perfectly valid "image/jpeg" content-type — that passed the check
-    // above but is not an actual usable thumbnail (seen in the wild at
-    // ~130 bytes). Reject anything implausibly small rather than trust
-    // the content-type header alone.
-    const MIN_THUMBNAIL_BYTES = 2048;
-    if (buffer.length < MIN_THUMBNAIL_BYTES) {
-      throw new Error(
-        `Thumbnail is only ${buffer.length} bytes — almost certainly a broken/placeholder ` +
-          `image, not a real thumbnail. Rejecting.`,
-      );
-    }
-
-    await mkdir(THUMB_DIR, { recursive: true });
-    const filename = `${reel.id}.jpg`;
-    await writeFile(path.join(THUMB_DIR, filename), buffer);
-
-    return { ...reel, thumbnail: `${THUMB_URL_PREFIX}/${filename}` };
-  } catch (err) {
-    console.warn(`Couldn't download thumbnail for reel ${reel.id}, skipping it:`, err.message);
-    return null; // drop reels whose thumbnail we couldn't fetch, rather than
-    // ship a broken/expiring image link to the site
-  }
-}
-
 async function fetchAccountStats() {
-  const fields = "username,followers_count,media_count";
-  const url =
-    `https://graph.instagram.com/${GRAPH_VERSION}/${IG_USER_ID}` +
-    `?fields=${fields}&access_token=${IG_ACCESS_TOKEN}`;
-
-  const res = await fetch(url);
-  const body = await res.json();
-
-  if (!res.ok) {
+  const { ok, body } = await graphGet(IG_USER_ID, { fields: "username,followers_count,media_count" });
+  if (!ok) {
     console.error("Instagram API error (account stats):", JSON.stringify(body, null, 2));
     return null;
   }
-
-  return {
-    username: body.username,
-    followers: body.followers_count,
-    posts: body.media_count,
-  };
+  return { username: body.username, followers: body.followers_count, posts: body.media_count };
 }
 
+/**
+ * Which URL is an actual IMAGE for this item?
+ *  - Reels and videos: thumbnail_url only. For a video, media_url is the raw
+ *    MP4 — saving that as a .jpg "succeeds" but produces a broken image.
+ *  - Single images and carousels: media_url (for a carousel, its cover image).
+ */
+function imageSource(item, isReel) {
+  if (isReel || item.media_type === "VIDEO") return item.thumbnail_url ?? "";
+  return item.media_url ?? "";
+}
+
+/** The bulk /media list sometimes omits the image URL; re-fetch that one item. */
+async function resolveImageUrl(item, isReel) {
+  const direct = imageSource(item, isReel);
+  if (direct) return direct;
+  try {
+    const { ok, body } = await graphGet(item.id, { fields: "media_url,thumbnail_url" });
+    if (ok) return imageSource({ ...item, media_url: body.media_url, thumbnail_url: body.thumbnail_url }, isReel);
+  } catch {
+    // handled by the caller dropping items with no usable image
+  }
+  return "";
+}
+
+/**
+ * Instagram image URLs are SIGNED and expire (often within a day or two), so
+ * hotlinking them breaks. Download each image once per run and serve it from
+ * /public instead, like the other real event photos.
+ */
+async function saveImage(url, dir, urlPrefix, id) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+  const contentType = res.headers.get("content-type") ?? "";
+  if (!contentType.startsWith("image/")) {
+    throw new Error(`Expected an image, got content-type "${contentType}"`);
+  }
+
+  const buffer = Buffer.from(await res.arrayBuffer());
+  if (buffer.length < MIN_IMAGE_BYTES) {
+    throw new Error(`Image is only ${buffer.length} bytes — a placeholder, not a real image`);
+  }
+
+  const filename = `${id}.jpg`;
+  await writeFile(path.join(dir, filename), buffer);
+  return `${urlPrefix}/${filename}`;
+}
+
+async function toRecord(item, { isReel }) {
+  const kind = isReel ? "reel" : "post";
+  const dir = isReel ? REEL_DIR : POST_DIR;
+  const prefix = isReel ? "/media/reels" : "/media/posts";
+
+  const url = await resolveImageUrl(item, isReel);
+  if (!url) {
+    console.warn(`The ${kind} ${item.id} has no usable image URL — dropping it from the site.`);
+    return null;
+  }
+
+  try {
+    const thumbnail = await saveImage(url, dir, prefix, item.id);
+    const record = {
+      id: item.id,
+      permalink: item.permalink,
+      thumbnail,
+      caption: (item.caption ?? "").slice(0, 200),
+      timestamp: new Date(item.timestamp).toISOString(),
+    };
+    if (!isReel) record.type = item.media_type;
+    return record;
+  } catch (err) {
+    console.warn(`Couldn't save the image for ${kind} ${item.id}, skipping it:`, err.message);
+    return null;
+  }
+}
+
+const isFromThisYear = (item) => new Date(item.timestamp).getFullYear() >= MIN_YEAR;
+
 async function main() {
+  await mkdir(REEL_DIR, { recursive: true });
+  await mkdir(POST_DIR, { recursive: true });
+
   const media = await fetchMedia();
 
   const stats = await fetchAccountStats();
   if (stats) {
-    await writeFile(STATS_OUTPUT_PATH, JSON.stringify(stats, null, 2) + "\n", "utf-8");
-    console.log(`Wrote account stats to ${STATS_OUTPUT_PATH}:`, stats);
+    await writeFile(STATS_JSON, JSON.stringify(stats, null, 2) + "\n", "utf-8");
+    console.log(`Wrote account stats to ${STATS_JSON}:`, stats);
   } else {
-    console.warn(
-      "Couldn't fetch account stats this run — leaving existing " +
-        "src/content/instagram-stats.json untouched.",
-    );
+    console.warn("Couldn't fetch account stats this run — leaving the existing file untouched.");
   }
 
   if (media.length === 0) {
-    // Empty response from the API itself is more likely a transient glitch
-    // than "the account genuinely has zero posts" — don't wipe good data.
-    console.warn(
-      "Instagram API returned no media at all. Leaving existing " +
-        "src/content/reels.json untouched so the site doesn't lose its " +
-        "last-known-good data.",
-    );
+    // An empty response from the API itself is more likely a transient glitch
+    // than "the account has zero posts" — don't wipe good data.
+    console.warn("Instagram API returned no media at all. Leaving reels.json and posts.json untouched.");
     return;
   }
 
-  const reels = media
-    .filter((item) => item.media_product_type === "REELS")
-    .filter((item) => new Date(item.timestamp).getFullYear() >= MIN_YEAR)
-    .slice(0, MAX_REELS)
-    .map(toReel);
+  // Inventory, so it's obvious in the Actions log what Instagram actually returned.
+  console.log(`Instagram returned ${media.length} item(s):`);
+  for (const item of media) {
+    console.log(`  ${String(item.timestamp).slice(0, 10)}  ${item.media_product_type}/${item.media_type}  ${item.permalink}`);
+  }
+  console.log("(A collab post only appears here if this account was the one that published it.)");
 
-  const reelsWithThumbnailUrls = await Promise.all(reels.map(fetchMissingThumbnail));
+  const reelItems = media.filter((i) => i.media_product_type === "REELS").filter(isFromThisYear).slice(0, MAX_REELS);
+  const postItems = media
+    .filter((i) => i.media_product_type !== "REELS" && i.media_product_type !== "STORY")
+    .filter(isFromThisYear)
+    .slice(0, MAX_POSTS);
 
-  const reelsWithLocalThumbnails = (
-    await Promise.all(reelsWithThumbnailUrls.map(downloadThumbnail))
-  ).filter(Boolean);
+  const reels = (await Promise.all(reelItems.map((i) => toRecord(i, { isReel: true })))).filter(Boolean);
+  const posts = (await Promise.all(postItems.map((i) => toRecord(i, { isReel: false })))).filter(Boolean);
 
-  // Here, an empty result is a deliberate outcome of the year filter (e.g.
-  // no 2026 reels posted yet), so we DO write it — this is what clears out
-  // stale reels from a previous year.
-  await writeFile(
-    OUTPUT_PATH,
-    JSON.stringify(reelsWithLocalThumbnails, null, 2) + "\n",
-    "utf-8",
-  );
-  console.log(`Wrote ${reelsWithLocalThumbnails.length} reel(s) to ${OUTPUT_PATH}`);
+  // An empty result here is a deliberate outcome of the year filter (e.g. no
+  // 2026 posts yet), so we DO write it — that clears out stale content.
+  await writeFile(REELS_JSON, JSON.stringify(reels, null, 2) + "\n", "utf-8");
+  await writeFile(POSTS_JSON, JSON.stringify(posts, null, 2) + "\n", "utf-8");
+  console.log(`Wrote ${reels.length} reel(s) to ${REELS_JSON}`);
+  console.log(`Wrote ${posts.length} post(s) to ${POSTS_JSON}`);
 }
 
 main().catch((err) => {

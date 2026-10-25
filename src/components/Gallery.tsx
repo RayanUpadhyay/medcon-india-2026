@@ -1,6 +1,7 @@
 import { gallery, links, sectionLabels } from "@/content/site";
 import { SectionLabel } from "@/components/primitives";
 import reelsData from "@/content/reels.json";
+import postsData from "@/content/posts.json";
 import instagramStats from "@/content/instagram-stats.json";
 
 type Reel = {
@@ -10,8 +11,27 @@ type Reel = {
   caption: string;
   timestamp: string;
 };
+type Post = Reel & { type: "IMAGE" | "CAROUSEL_ALBUM" | "VIDEO" };
+type Tile = Reel & { kind: "reel" | "album" | "post" };
 
 const reels = reelsData as Reel[];
+const posts = postsData as Post[];
+
+// Safari can't parse "+0000" (no colon) offsets, so normalise before parsing.
+const when = (s: string) => Date.parse(s.replace(/([+-]\d\d)(\d\d)$/, "$1:$2"));
+
+/** Reels and posts together, newest first. */
+const instagramTiles: Tile[] = [
+  ...reels.map((r): Tile => ({ ...r, kind: "reel" })),
+  ...posts.map(
+    (p): Tile => ({
+      ...p,
+      kind: p.type === "CAROUSEL_ALBUM" ? "album" : p.type === "VIDEO" ? "reel" : "post",
+    }),
+  ),
+]
+  .sort((a, b) => when(b.timestamp) - when(a.timestamp))
+  .slice(0, 8);
 
 function formatCount(n: number): string {
   if (n >= 1000) return `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k`;
@@ -82,42 +102,50 @@ export default function Gallery() {
           })}
         </ul>
 
-        {/* ── From Instagram (reels) ───────────────────────────────────── */}
-        {reels.length > 0 && (
+        {/* ── From Instagram (reels + posts) ───────────────────────────── */}
+        {instagramTiles.length > 0 && (
           <div className="mt-20 md:mt-28">
             <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#3D5260] mb-6">
               From Instagram
             </p>
-            <ul className="flex flex-wrap gap-3 list-none p-0 m-0">
-              {reels.map((reel) => (
-                <li
-                  key={reel.id}
-                  className="bg-bg border border-line overflow-hidden aspect-[9/16] flex-1 basis-[160px] min-w-[140px] max-w-[220px]"
-                >
+            <ul className="grid grid-cols-2 md:grid-cols-4 gap-3 list-none p-0 m-0">
+              {instagramTiles.map((tile) => (
+                <li key={tile.id} className="bg-bg border border-line overflow-hidden aspect-[3/4]">
                   <a
-                    href={reel.permalink}
+                    href={tile.permalink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group relative block w-full h-full"
                   >
                     <img
-                      src={reel.thumbnail}
-                      alt={reel.caption || "Instagram reel"}
+                      src={tile.thumbnail}
+                      alt={tile.caption || (tile.kind === "reel" ? "Instagram reel" : "Instagram post")}
                       loading="lazy"
                       decoding="async"
                       className="gallery-img w-full h-full object-cover bg-panel transition-[transform,opacity] duration-500 group-hover:scale-[1.04]"
                     />
-                    {/* Play icon overlay — signals "this is a video, leaves the site" */}
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-0 flex items-center justify-center"
-                    >
-                      <span className="flex items-center justify-center w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm">
-                        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white translate-x-[1px]">
-                          <path d="M8 5v14l11-7z" />
+                    {/* Play icon: a video, opens on Instagram */}
+                    {tile.kind === "reel" && (
+                      <span aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
+                        <span className="flex items-center justify-center w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm">
+                          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white translate-x-[1px]">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </span>
+                      </span>
+                    )}
+                    {/* Stacked-squares icon: a multi-photo carousel */}
+                    {tile.kind === "album" && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm"
+                      >
+                        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-white" strokeWidth="2">
+                          <rect x="8" y="8" width="12" height="12" rx="2" />
+                          <path d="M16 4H6a2 2 0 0 0-2 2v10" />
                         </svg>
                       </span>
-                    </span>
+                    )}
                   </a>
                 </li>
               ))}
