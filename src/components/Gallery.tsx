@@ -67,7 +67,18 @@ function formatCount(n: number): string {
   return String(n);
 }
 
-function InstagramTile({ tile, aspect, showCaption }: { tile: Tile; aspect: string; showCaption?: boolean }) {
+function InstagramTile({
+  tile,
+  aspect,
+  showCaption,
+  overlayCredit,
+}: {
+  tile: Tile;
+  aspect: string;
+  showCaption?: boolean;
+  /** Put the username on the picture and drop the box underneath (used for reels). */
+  overlayCredit?: boolean;
+}) {
   return (
     <li className="flex flex-col bg-bg border border-line overflow-hidden">
       <a
@@ -105,13 +116,23 @@ function InstagramTile({ tile, aspect, showCaption }: { tile: Tile; aspect: stri
             </svg>
           </span>
         )}
-      </a>
-      <div className="flex flex-col gap-2 min-h-[3rem] px-3 py-3 border-t border-line">
-        <p className="font-mono text-[10px] leading-snug tracking-[0.06em] text-sage">{credit(tile.authors)}</p>
-        {showCaption && tile.caption && (
-          <p className="font-sans text-[13px] leading-[1.5] text-muted line-clamp-3">{tile.caption}</p>
+        {overlayCredit && (
+          <span
+            className="absolute inset-x-0 bottom-0 px-3 pt-10 pb-3 font-mono text-[11px] leading-snug tracking-[0.06em] text-white"
+            style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72), rgba(0,0,0,0))" }}
+          >
+            {credit(tile.authors)}
+          </span>
         )}
-      </div>
+      </a>
+      {!overlayCredit && (
+        <div className="flex flex-col gap-2 min-h-[3rem] px-3 py-3 border-t border-line">
+          <p className="font-mono text-[10px] leading-snug tracking-[0.06em] text-sage">{credit(tile.authors)}</p>
+          {showCaption && tile.caption && (
+            <p className="font-sans text-[13px] leading-[1.5] text-muted line-clamp-3">{tile.caption}</p>
+          )}
+        </div>
+      )}
     </li>
   );
 }
@@ -235,7 +256,7 @@ export default function Gallery() {
               ) : (
                 <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 list-none p-0 m-0">
                   {current.tiles.map((tile) => (
-                    <InstagramTile key={tile.id} tile={tile} aspect="aspect-[9/16]" />
+                    <InstagramTile key={tile.id} tile={tile} aspect="aspect-[9/16]" overlayCredit />
                   ))}
                 </ul>
               )}
