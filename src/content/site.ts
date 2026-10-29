@@ -136,7 +136,7 @@ export const hero = {
     { label: "Time", value: "7:15 AM — 3:00 PM" },
     { label: "Venue", value: "TISB, Bangalore" },
     { label: "Eligibility", value: "Grades 8 – 12" },
-    { label: "Entry", value: "₹250" },
+    { label: "Entry", value: "Free for TISB students\n₹250 for all others" },
   ] as { label: string; value: string }[],
 };
 
@@ -296,7 +296,7 @@ export type Partner = {
 
 /* PLACEHOLDER: no sponsor or partner listed here is confirmed. */
 export const partners: Partner[] = [
-  { tier: "Sponsor", name: "Medvital Venture", note: "" },
+  { tier: "Sponsor", name: "Manipal", note: "" },
   { tier: "Sponsor", name: "Icrest Academy", note: "" },
   { tier: "Host Institution", name: "TISB", note: "The International School Bangalore" },
 ];

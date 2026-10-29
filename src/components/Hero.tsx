@@ -129,7 +129,7 @@ export default function Hero() {
                 <dt className="font-mono text-[10px] tracking-[0.2em] uppercase text-faint mb-1">
                   {row.label}
                 </dt>
-                <dd className="font-sans text-[15px] text-fg">{row.value}</dd>
+                <dd className="font-sans text-[15px] text-fg whitespace-pre-line">{row.value}</dd>
               </div>
             ))}
           </dl>
