@@ -350,3 +350,10 @@ export const sectionLabels = {
   contact: { index: "07", label: "Contact" },
   venue: { index: "08", label: "Venue" },
 } as const;
+
+/** When MEDCON starts and ends, in India time. The countdown runs off these. Keep in sync with
+ *  hero.details, the About text and the structured data in index.html if the date ever moves. */
+export const eventTimes = {
+  start: "2026-10-31T07:15:00+05:30",
+  end: "2026-10-31T15:00:00+05:30",
+};

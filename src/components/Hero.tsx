@@ -1,5 +1,6 @@
 import logo from "@/imports/image.png";
 import { hero, images, links } from "@/content/site";
+import Countdown from "@/components/Countdown";
 
 export default function Hero() {
   return (
@@ -122,17 +123,20 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Event details */}
-          <dl className="border border-line bg-surface backdrop-blur-sm divide-y divide-line">
-            {hero.details.map((row) => (
-              <div key={row.label} className="px-6 py-4">
-                <dt className="font-mono text-[10px] tracking-[0.2em] uppercase text-faint mb-1">
-                  {row.label}
-                </dt>
-                <dd className="font-sans text-[15px] text-fg whitespace-pre-line">{row.value}</dd>
-              </div>
-            ))}
-          </dl>
+          {/* Countdown + event details */}
+          <div className="flex flex-col gap-3">
+            <Countdown />
+            <dl className="border border-line bg-surface backdrop-blur-sm divide-y divide-line">
+              {hero.details.map((row) => (
+                <div key={row.label} className="px-6 py-4">
+                  <dt className="font-mono text-[10px] tracking-[0.2em] uppercase text-faint mb-1">
+                    {row.label}
+                  </dt>
+                  <dd className="font-sans text-[15px] text-fg whitespace-pre-line">{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
       </div>
     </section>
