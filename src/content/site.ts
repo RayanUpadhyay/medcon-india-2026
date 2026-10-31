@@ -297,7 +297,7 @@ export type Partner = {
 /* PLACEHOLDER: no sponsor or partner listed here is confirmed. */
 export const partners: Partner[] = [
   { tier: "Sponsor", name: "Manipal", note: "" },
-  { tier: "Sponsor", name: "Icrest Academy", note: "" },
+  { tier: "Sponsor", name: "iCrest Academy", note: "" },
   { tier: "Host Institution", name: "TISB", note: "The International School Bangalore" },
 ];
 
