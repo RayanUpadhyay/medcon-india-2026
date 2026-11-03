@@ -5,6 +5,7 @@ import reelsData from "@/content/reels.json";
 import postsData from "@/content/posts.json";
 import manualData from "@/content/manual-posts.json";
 import instagramStats from "@/content/instagram-stats.json";
+import authorOverrides from "@/content/author-overrides.json";
 
 type Reel = {
   id: string;
@@ -33,6 +34,11 @@ const allPosts: Post[] = [
   ...manualPosts.filter((m) => !synced.has(codeOf(m.permalink)) && !synced.has(firstLine(m.caption))),
 ];
 
+// Credits Instagram's API can't tell us (e.g. someone who collaborated on a reel) live in
+// author-overrides.json, keyed by the reel or post id. The sync never touches that file.
+const overrides = authorOverrides as Record<string, string[]>;
+const authorsFor = (item: Reel) => overrides[item.id] ?? overrides[codeOf(item.permalink)] ?? item.authors;
+
 // Safari can't parse "+0000" (no colon) offsets, so normalise before parsing.
 const when = (s: string) => Date.parse(s.replace(/([+-]\d\d)(\d\d)$/, "$1:$2"));
 const newestFirst = (a: Reel, b: Reel) => when(b.timestamp) - when(a.timestamp);
@@ -40,12 +46,13 @@ const newestFirst = (a: Reel, b: Reel) => when(b.timestamp) - when(a.timestamp);
 const postTiles: Tile[] = allPosts
   .map((p): Tile => ({
     ...p,
+    authors: authorsFor(p),
     kind: p.type === "CAROUSEL_ALBUM" ? "album" : p.type === "VIDEO" ? "video" : "post",
   }))
   .sort(newestFirst)
   .slice(0, 8);
 const reelTiles: Tile[] = reels
-  .map((r): Tile => ({ ...r, kind: "reel" }))
+  .map((r): Tile => ({ ...r, authors: authorsFor(r), kind: "reel" }))
   .sort(newestFirst)
   .slice(0, 8);
 

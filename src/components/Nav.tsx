@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import logo from "@/imports/image.png";
 import tisbLogo from "@/imports/tisb-logo.png";
-import { footer, links, navLinks } from "@/content/site";
+import { footer, links, navLinks, eventConcluded } from "@/content/site";
 import { useActiveSection, useScrolled, useTheme } from "@/lib/hooks";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -118,12 +118,12 @@ export default function Nav() {
             className="inline-flex items-center justify-center w-8 h-8 text-muted hover:text-fg transition-colors duration-200"
           />
           <a
-            href={links.register}
+            href={eventConcluded ? links.instagramUrl : links.register}
             target="_blank"
             rel="noopener noreferrer"
             className="font-sans text-[12px] tracking-[0.14em] uppercase px-5 py-2.5 border border-sage text-sage hover:bg-sage hover:text-on-accent transition-colors duration-200 font-[600]"
           >
-            Register
+            {eventConcluded ? "Follow us" : "Register"}
           </a>
         </div>
 
@@ -182,13 +182,13 @@ export default function Nav() {
             className="flex items-center justify-between py-3 border-b border-line font-sans text-[13px] tracking-[0.12em] uppercase text-muted hover:text-fg transition-colors"
           />
           <a
-            href={links.register}
+            href={eventConcluded ? links.instagramUrl : links.register}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
             className="mt-4 font-sans text-[13px] tracking-[0.12em] uppercase py-3.5 border border-sage text-sage text-center font-[600]"
           >
-            Register
+            {eventConcluded ? "Follow us" : "Register"}
           </a>
         </div>
       </div>

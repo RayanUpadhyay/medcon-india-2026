@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { eventTimes } from "@/content/site";
+import { eventTimes, eventConcluded } from "@/content/site";
 
 const START = Date.parse(eventTimes.start);
 const END = Date.parse(eventTimes.end);
@@ -18,7 +18,19 @@ export default function Countdown() {
     return () => clearInterval(id);
   }, []);
 
-  if (now >= END) return null;
+  if (eventConcluded || now >= END) {
+    return (
+      <div className="border border-line bg-surface backdrop-blur-sm px-6 py-5">
+        <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-sage mb-3">Event concluded</p>
+        <p className="font-sans text-[15px] text-fg leading-snug mb-3">
+          MEDCON 2026 took place on 31 October. Thank you to every student, speaker and partner who made it happen.
+        </p>
+        <a href="#gallery" className="font-mono text-[11px] tracking-[0.16em] uppercase text-sage hover:text-sage-bright transition-colors">
+          See the highlights →
+        </a>
+      </div>
+    );
+  }
 
   const card = "border border-line bg-surface backdrop-blur-sm px-6 py-5";
 

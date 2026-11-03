@@ -12,7 +12,7 @@ export default function Events() {
             className="font-display font-[600] text-fg leading-none tracking-[-0.025em]"
             style={{ fontSize: "clamp(26px, 3.5vw, 48px)" }}
           >
-            What to expect
+            The programme
           </h2>
         </div>
 

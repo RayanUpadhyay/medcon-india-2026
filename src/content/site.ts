@@ -146,8 +146,8 @@ export const about = {
     "India's first student-led medical conference — built for the next generation of healers.",
   /** Official MEDCON 2026 description, provided by the organizing team. */
   paragraphs: [
-    "MedCon is India's first student-led medical conference, happening on Saturday, October 31st, 2026. The conference covers a range of important topics in medicine through workshops, debates, and panel discussions. This year's theme of \"Beyond The White Coat\" focuses on the many disciplines and perspectives that shape healthcare, going beyond traditional medicine.",
-    "The student competition helps test all you've learnt throughout the day, involving participants presenting unique solutions to important medicinal problems. The prizes include internships and shadowing opportunities alongside the professionals speaking at the conference. Make sure you register soon to secure your spot — we hope to see you there!",
+    "MedCon is India's first student-led medical conference, held on Saturday, October 31st, 2026. The conference covers a range of important topics in medicine through workshops, debates, and panel discussions. This year's theme of \"Beyond The White Coat\" focuses on the many disciplines and perspectives that shape healthcare, going beyond traditional medicine.",
+    "The student competition helps test all you've learnt throughout the day, involving participants presenting unique solutions to important medicinal problems. The prizes include internships and shadowing opportunities alongside the professionals speaking at the conference. Thank you to everyone who took part and made the day what it was.",
   ],
   missionLabel: "Mission",
   missionQuote:
@@ -192,9 +192,7 @@ export const events: ProgrammeEvent[] = [
     num: "03",
     category: "Best Student Life Saver",
     title: "Student Competition",
-    /** PLACEHOLDER: description pending from the R&C team — replace with
-     *  their copy once available. */
-    body: "Details of this year's Student Competition are being finalized by the Research & Competitions team — check back soon, or see the Panel section for confirmed speakers in the meantime.",
+    body: "Code Blue, the student competition, put what everyone had learnt through the day to the test. Participants presented unique solutions to important medical problems, with prizes including internships and shadowing opportunities.",
     tag: "Open to Grades 8 – 12",
     accent: "sage",
     image: images.eventCompetition,
@@ -303,7 +301,7 @@ export const partners: Partner[] = [
 
 export const sponsorsCta = {
   eyebrow: "Interested in partnering?",
-  title: "Become a MEDCON 2026 Partner",
+  title: "Partner with MEDCON",
   body: "Reach hundreds of India's most promising future medical professionals.",
   cta: "Get in Touch",
 };
@@ -357,3 +355,7 @@ export const eventTimes = {
   start: "2026-10-31T07:15:00+05:30",
   end: "2026-10-31T15:00:00+05:30",
 };
+
+/** The event is over. While this is true the site thanks people instead of selling tickets:
+ *  no Register buttons, no countdown, no entry price. Set it to false to bring them back. */
+export const eventConcluded = true;

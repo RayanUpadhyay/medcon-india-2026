@@ -1,5 +1,5 @@
 import logo from "@/imports/image.png";
-import { hero, images, links } from "@/content/site";
+import { hero, images, links, eventConcluded } from "@/content/site";
 import Countdown from "@/components/Countdown";
 
 export default function Hero() {
@@ -106,14 +106,22 @@ export default function Hero() {
 
             {/* CTAs */}
             <div id="register" className="flex flex-wrap items-center gap-4 scroll-mt-24">
-              <a
-                href={links.register}
-                target="_blank"
-                rel="noopener noreferrer"
+              {eventConcluded ? (
+                <a href="#gallery"
                 className="font-sans text-[12px] tracking-[0.14em] uppercase px-8 py-4 bg-sage text-on-accent font-[700] hover:bg-sage-bright transition-colors duration-200"
               >
-                {hero.ctaPrimary}
-              </a>
+                  See the highlights
+                </a>
+              ) : (
+                <a
+                  href={links.register}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-sans text-[12px] tracking-[0.14em] uppercase px-8 py-4 bg-sage text-on-accent font-[700] hover:bg-sage-bright transition-colors duration-200"
+                >
+                  {hero.ctaPrimary}
+                </a>
+              )}
               <a
                 href="#events"
                 className="font-sans text-[12px] tracking-[0.14em] uppercase px-8 py-4 border border-line-strong text-fg hover:border-line-stronger transition-colors duration-200"
@@ -127,7 +135,7 @@ export default function Hero() {
           <div className="flex flex-col gap-3">
             <Countdown />
             <dl className="border border-line bg-surface backdrop-blur-sm divide-y divide-line">
-              {hero.details.map((row) => (
+              {hero.details.filter((row) => !(eventConcluded && row.label === "Entry")).map((row) => (
                 <div key={row.label} className="px-6 py-4">
                   <dt className="font-mono text-[10px] tracking-[0.2em] uppercase text-faint mb-1">
                     {row.label}
