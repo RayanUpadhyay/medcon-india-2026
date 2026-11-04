@@ -185,7 +185,7 @@ export default function Gallery() {
 
         {/* ── Event Day photos ─────────────────────────────────────────── */}
         <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#3D5260] mb-6">
-          Event Day — 2025
+          Event Day — 2026
         </p>
         <ul className="flex flex-wrap gap-3 list-none p-0 m-0">
           {gallery.map((g) => {

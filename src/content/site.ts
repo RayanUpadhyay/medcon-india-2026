@@ -78,6 +78,42 @@ export type GalleryImage = {
 /* Real MEDCON event photography (added Sept 2026, replacing stock photos). */
 export const gallery: GalleryImage[] = [
   {
+    src: "/media/event-day-2026/01-opening-ceremony-hall.jpg",
+    alt: "Opening ceremony in the TISB auditorium, with the day's programme on screen",
+  },
+  {
+    src: "/media/event-day-2026/02-programme-at-the-podium.jpg",
+    alt: "A speaker introduces the day's programme at the podium",
+  },
+  {
+    src: "/media/event-day-2026/03-first-aid-workshop-begins.jpg",
+    alt: "A trainer leads the first aid and CPR workshop with the ABCDE steps on screen",
+  },
+  {
+    src: "/media/event-day-2026/04-trainer-and-student-at-the-mannequin.jpg",
+    alt: "A trainer and a student beside a CPR mannequin, with airway, breathing and circulation on screen",
+  },
+  {
+    src: "/media/event-day-2026/05-cpr-demonstration.jpg",
+    alt: "Student volunteers practise chest compressions on a training mannequin with the trainer guiding",
+  },
+  {
+    src: "/media/event-day-2026/06-questions-from-the-audience.jpg",
+    alt: "A trainer and students in the audience trade questions during the workshop",
+  },
+  {
+    src: "/media/event-day-2026/07-hands-on-with-the-whole-room.jpg",
+    alt: "Students gather around a CPR demonstration during the workshop",
+  },
+  {
+    src: "/media/event-day-2026/08-practising-cpr.jpg",
+    alt: "A volunteer practises CPR on a mannequin while students look on",
+  },
+];
+
+/** Last year's Event Day photos, kept in case they're wanted again. */
+export const gallery2025: GalleryImage[] = [
+  {
     src: "/media/gallery/auditorium-25-years.jpg",
     alt: "TISB auditorium ahead of the MEDCON panel session",
   },
